@@ -43,7 +43,12 @@ class MyRegex:
     phone = get_phone_regex()
 
 # Functions
+def remove_comas_from_message(message_string):
+    return " ".join(message_string.split(","))
+
 def get_date_from_message(message_string):
+    message_string = remove_comas_from_message(message_string)
+
     date = re.findall(MyRegex.date, message_string)
 
     if (date != []):
@@ -55,6 +60,8 @@ def get_date_from_message(message_string):
     return date
 
 def get_nickname_from_message(message_string):
+    message_string = remove_comas_from_message(message_string)
+
     nickname = re.findall(MyRegex.nickname, message_string)
 
     if (nickname != []):
@@ -66,6 +73,8 @@ def get_nickname_from_message(message_string):
     return nickname
 
 def get_phone_from_message(message_string):
+    message_string = remove_comas_from_message(message_string)
+
     phone = re.findall(MyRegex.phone, message_string)
 
     if (phone != []):
@@ -77,13 +86,15 @@ def get_phone_from_message(message_string):
     return phone
 
 def get_name_from_message(message_string):
-    # Consider name is everything what comes before
-    # first occurance any matched pattern (phone, date etc)
+    message_string = remove_comas_from_message(message_string)
+
     name = None
     date = get_date_from_message(message_string)
     nickname = get_nickname_from_message(message_string)
     phone = get_phone_from_message(message_string)
 
+    # Consider name is everything what comes before
+    # first occurance any matched pattern (phone, date etc)
     if (date != None):
         name = message_string.split(date)[0]
         if (nickname != None):
@@ -149,3 +160,5 @@ if __name__ == "__main__":
     print("Date regex:\n%s\n" % MyRegex.date)
     print("Nickname regex:\n%s\n" % MyRegex.nickname)
     print("Phone regex:\n%s\n" % MyRegex.phone)
+    message = input("Input message: ")
+    print(get_date_from_message(message))
