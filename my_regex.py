@@ -108,13 +108,13 @@ def get_name_from_message(message_string):
 
     return name
 
-def normalize_date(date_string):
+def normalize_date(date_string, sep="."):
     date_normal = date_string
 
-    date_normal = ".".join(date_normal.split(" "))
-    date_normal = ".".join(date_normal.split("."))
-    date_normal = ".".join(date_normal.split(","))
-    date_normal = ".".join(date_normal.split("/"))
+    date_normal = sep.join(date_normal.split(" "))
+    date_normal = sep.join(date_normal.split("."))
+    date_normal = sep.join(date_normal.split(","))
+    date_normal = sep.join(date_normal.split("/"))
 
     return date_normal
 
