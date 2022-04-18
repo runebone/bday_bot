@@ -3,8 +3,8 @@ import json
 from config import *
 
 class Database:
-    def __init__(self):
-        self.file = Config.Database.file
+    def __init__(self, file):
+        self.file = file
         self.sample_record = Config.Database.sample_record
         self.record_fields = Config.Database.record_fields
         self.users = Config.Database.users
