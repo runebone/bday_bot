@@ -24,12 +24,20 @@ class Database:
         self.sample_record = sample_record
         self.record_fields = record_fields
         self.users = users
+        self.empty = {self.users: [{}]}
 
     # FIXME: load and dump funcs logic
     # TODO: check your notes
     def load(self):
-        with open(self.file) as f:
-            database_dict = json.load(f)
+        try:
+            with open(self.file) as f:
+                database_dict = json.load(f)
+        except:
+            # Database is not created
+            with open(self.file, "w") as f:
+                json.dump(self.empty, f, indent=4)
+                database_dict = self.empty
+
         return database_dict
 
     def dump(self, updated_database_dict):
@@ -139,7 +147,3 @@ if __name__ == "__main__":
         "phone": "lskj",
         "note": None
     }
-
-    #db.add_new_record(317823738, record)
-    #db.delete_record_by_index(317823738, 1)
-    print(db.get_record_by_index(440058642, 1))
