@@ -5,6 +5,9 @@ from config import BotText
 from errors import *
 from db import Database
 
+# Initialize database
+db = Database()
+
 # TODO: Сделать клаву с командами, чтобы бабки могли пользоваться
 
 # Get API token
@@ -28,7 +31,7 @@ def start(message):
 @bot.message_handler(commands=["add"])
 def add(message):
     bot.send_message(message.chat.id, BotText.ADD.value)
-    #bot.register_next_step_handler(message, process_add_step)
+    bot.register_next_step_handler(message, process_add_step)
 
 @bot.message_handler(commands=["delete", "cut"])
 def delete(message):
@@ -52,19 +55,31 @@ def process_add_step(message):
         assert_message_has_name_in_the_beginning(message)
         assert_message_has_date(message)
 
-        # name -> database
-        # date -> normalize -> database
+        record = db.sample_record
+
+        name = get_name_from_message(message.text)
+        record["name"] = name
+
+        date = get_date_from_message(message.text)
+        date = normalize_date(date)
+        date = normal_date_to_usa_format(date)
+        record["date"] = date
 
         if (message_has_at_sign(message)):
             if (message_has_nickname(message)):
-                pass
-                # nickname -> database
+                nickname = get_nickname_from_message(message.text)
+                record["nickname"] = nickname[1:] # Store nickname without @
             else:
                 raise InvalidNickname
 
         if (message_has_phone(message)):
-            pass
-            # phone -> normalize -> beautify -> database
+            phone = get_phone_from_message(message.text)
+            phone = normalize_phone(phone)
+            record["phone"] = phone
+
+        db.add_new_record(message.chat.id, record)
+
+        bot.send_message(message.chat.id, BotText.ADD_SUCCESS.value)
 
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
@@ -102,13 +117,22 @@ def message_has_phone(message):
 # === END OF PROCESS_ADD_STEP
 
 def process_delete_step(message):
-    pass
+    try:
+        pass
+    except Exception as e:
+        bot.send_message(message.chat.id, e.text)
 
 def process_show_step(message):
-    pass
+    try:
+        pass
+    except Exception as e:
+        bot.send_message(message.chat.id, e.text)
 
 def process_edit_step(message):
-    pass
+    try:
+        pass
+    except Exception as e:
+        bot.send_message(message.chat.id, e.text)
 
 # ===============================================
-bot.polling() # Keeps checking for messages
+bot.infinity_polling() # Keeps checking for messages
