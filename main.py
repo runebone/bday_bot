@@ -125,26 +125,32 @@ def remove_parsed_data_from_message(message_string, data):
 
 # === END OF PROCESS_ADD_STEP
 
+# === PROCESS_DELETE_STEP
 def process_delete_step(message):
     try:
         pass
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
         bot.register_next_step_handler(message, process_delete_step)
+# === END OF PROCESS_DELETE_STEP
 
+# === PROCESS_SHOW_STEP
 def process_show_step(message):
     try:
         pass
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
         bot.register_next_step_handler(message, process_show_step)
+# === END OF PROCESS_SHOW_STEP
 
+# === PROCESS_EDIT_STEP
 def process_edit_step(message):
     try:
         pass
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
         bot.register_next_step_handler(message, process_edit_step)
+# === END OF PROCESS_EDIT_STEP
 
 # ===============================================
 bot.infinity_polling() # Keeps checking for messages
