@@ -6,19 +6,22 @@ file = "database.json"
 
 # XXX: Date is stored in MM-DD-YYYY (USA) format.
 
-record_fields = list({
+sample_record = {
     "name": None,
     "date": None,
     "nickname": None,
     "phone": None,
     "note": None
-}.keys())
+}
+
+record_fields = list(sample_record.keys())
 
 users = "user_data"
 
 class Database:
     def __init__(self):
         self.file = file
+        self.sample_record = sample_record
         self.record_fields = record_fields
         self.users = users
 
