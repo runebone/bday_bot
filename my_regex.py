@@ -121,8 +121,10 @@ def normalize_date(date_string, sep="."):
     return date_normal
 
 def normal_date_to_usa_format(date_normal):
-    day, month, year = date_normal.split(".")
-    return "-".join([month, day, year])
+    # DD.MM.YYYY -> MM-DD-YYYY
+    date = date_normal.split(".")
+    date[0], date[1] = date[1], date[0]
+    return "-".join(date)
 
 def normalize_phone_number(phone_string):
     phone_normal = phone_string
