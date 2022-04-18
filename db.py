@@ -1,29 +1,13 @@
 import pandas as pd
 import json
-from errors import *
-
-file = "database.json"
-
-# XXX: Date is stored in MM-DD-YYYY (USA) format.
-
-sample_record = {
-    "name": None,
-    "date": None,
-    "nickname": None,
-    "phone": None,
-    "note": None
-}
-
-record_fields = list(sample_record.keys())
-
-users = "user_data"
+from config import *
 
 class Database:
     def __init__(self):
-        self.file = file
-        self.sample_record = sample_record
-        self.record_fields = record_fields
-        self.users = users
+        self.file = Config.Database.file
+        self.sample_record = Config.Database.sample_record
+        self.record_fields = Config.Database.record_fields
+        self.users = Config.Database.users
         self.empty = {self.users: [{}]}
 
     # FIXME: load and dump funcs logic
