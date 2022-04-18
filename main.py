@@ -7,9 +7,10 @@ from db import Database
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # Initialize database; global constant
-db = Database()
+db = Database(Config.Database.file)
 
-# TODO: Сделать клаву с командами, чтобы бабки могли пользоваться
+def get_database():
+    return db
 
 # Get API token
 with open(".API_TOKEN") as f:
@@ -28,17 +29,17 @@ def start(message):
 @bot.message_handler(commands=["add"])
 def add(message):
     bot.send_message(message.chat.id, BotText.ADD)
-    bot.register_next_step_handler(message, process_add_step)
+    bot.register_next_step_handler(message, process_add_step, db)
 
 @bot.message_handler(commands=["delete", "cut"])
 def delete(message):
     #bot.send_message(message.chat.id, BotText.DELETE)
-    process_delete_step(message)
+    process_delete_step(message, db)
     #bot.register_next_step_handler(message, process_delete_step)
 
 @bot.message_handler(commands=["show", "see"])
 def show(message):
-    process_show_step(message)
+    process_show_step(message, db)
 
 @bot.message_handler(commands=["edit", "change"])
 def edit(message):
@@ -46,7 +47,7 @@ def edit(message):
     #bot.register_next_step_handler(message, process_edit_step)
 
 # === PROCESS_ADD_STEP
-def process_add_step(message):
+def process_add_step(message, db):
     try:
         assert_message_has_valid_length(message)
         assert_message_has_name_in_the_beginning(message)
@@ -123,14 +124,15 @@ def remove_parsed_data_from_message(message_string, data):
 # === END OF PROCESS_ADD_STEP
 
 # === PROCESS_DELETE_STEP XXX
-def process_delete_step(message):
+def process_delete_step(message, db):
     try:
         # TODO: some asserts (user has records)
         # TODO: get index from user
         records = db.get_user_records(message.chat.id)
         for i in range(len(records)):
             string = get_printable_string_from_record(records[i], i)
-            bot.send_message(message.chat.id, string, reply_markup=gen_edit_markup())
+            bot.send_message(message.chat.id, string, \
+                    reply_markup=gen_edit_markup())
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
         bot.register_next_step_handler(message, process_delete_step)
@@ -138,7 +140,8 @@ def process_delete_step(message):
 def gen_edit_markup():
     markup = InlineKeyboardMarkup()
     markup.row_width = 2
-    markup.add(InlineKeyboardButton("Изменить", callback_data="cb_edit"), InlineKeyboardButton("Удалить", callback_data="cb_delete"))
+    markup.add(InlineKeyboardButton("Изменить", callback_data="cb_edit"), \
+            InlineKeyboardButton("Удалить", callback_data="cb_delete"))
     return markup
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -148,6 +151,7 @@ def callback_query(call):
         index = get_index_from_bot_message(call.message)
     elif call.data == "cb_delete":
         index = get_index_from_bot_message(call.message)
+        db = get_database()
         db.delete_record_by_index(call.message.chat.id, index)
         bot.send_message(call.message.chat.id, "Deleted.")
 
@@ -160,7 +164,7 @@ def get_index_from_bot_message(message):
 
 # === PROCESS_SHOW_STEP
 # FIXME: clean-up this shit
-def process_show_step(message):
+def process_show_step(message, db):
     try:
         # TODO: some asserts (user has records)
         records = db.get_user_records(message.chat.id)
