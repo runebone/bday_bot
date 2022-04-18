@@ -1,5 +1,18 @@
 # from enum import Enum
 
+class Config:
+    class Database:
+        file = "database.json"
+        sample_record = {
+            "name": None,
+            "date": None,
+            "nickname": None,
+            "phone": None,
+            "note": None
+        }
+        record_fields = list(sample_record.keys())
+        users = "user_data"
+
 class BotText:
     START = "Start message example."
     ADD = "Add message example."
