@@ -126,7 +126,7 @@ def normal_date_to_usa_format(date_normal):
     date[0], date[1] = date[1], date[0]
     return "-".join(date)
 
-def normalize_phone_number(phone_string):
+def normalize_phone(phone_string):
     phone_normal = phone_string
 
     phone_normal = "".join(phone_normal.split(" "))
@@ -137,7 +137,7 @@ def normalize_phone_number(phone_string):
 
     return phone_normal
 
-def beautify_phone_number(phone_normal_string):
+def beautify_phone(phone_normal_string):
     # ABC1234567890 - phone_normal_string
     phone_beautiful = ""
     phone_beautiful += phone_normal_string[-2:]
