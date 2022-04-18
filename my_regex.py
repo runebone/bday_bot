@@ -4,7 +4,7 @@ import re
 def get_date_regex():
     begin_of_match = "(?<!\S)" # There is no not-space symbols before the match
     end_of_match = "(?!\S)" # "(?=\s|$)" # ---||--- after the match
-    sep = "[ .,/]"
+    sep = "[ .,-/]"
     day = "(?:[0]?[1-9]|[12]\d|3[01])"
     month = "(?:[0]?[1-9]|1[0-2])"
     year = "(?:19\d\d|20\d\d|\d\d)"
@@ -44,6 +44,7 @@ class MyRegex:
 
 # Functions
 def remove_comas_from_message(message_string):
+    # FIXME: potential bug
     return " ".join(message_string.split(","))
 
 def get_date_from_message(message_string):
@@ -114,9 +115,14 @@ def normalize_date(date_string, sep="."):
     date_normal = sep.join(date_normal.split(" "))
     date_normal = sep.join(date_normal.split("."))
     date_normal = sep.join(date_normal.split(","))
+    date_normal = sep.join(date_normal.split("-"))
     date_normal = sep.join(date_normal.split("/"))
 
     return date_normal
+
+def normal_date_to_usa_format(date_normal):
+    day, month, year = date_normal.split(".")
+    return "-".join([month, day, year])
 
 def normalize_phone_number(phone_string):
     phone_normal = phone_string
@@ -162,3 +168,4 @@ if __name__ == "__main__":
     print("Phone regex:\n%s\n" % MyRegex.phone)
     message = input("Input message: ")
     print(get_date_from_message(message))
+    print(normal_date_to_usa_format(normalize_date((get_date_from_message(message)))))
