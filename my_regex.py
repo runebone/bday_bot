@@ -67,7 +67,7 @@ def get_nickname_from_message(message_string):
 
     if (nickname != []):
         # Use first if there are several matches
-        nickname = nickname[0]
+        nickname = nickname[0][1:] # Skip @ sign
     else:
         nickname = None
 
@@ -169,5 +169,4 @@ if __name__ == "__main__":
     print("Nickname regex:\n%s\n" % MyRegex.nickname)
     print("Phone regex:\n%s\n" % MyRegex.phone)
     message = input("Input message: ")
-    print(get_date_from_message(message))
-    print(normal_date_to_usa_format(normalize_date((get_date_from_message(message)))))
+    print(get_nickname_from_message(message))
