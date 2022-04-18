@@ -107,6 +107,9 @@ def get_name_from_message(message_string):
     # If there is no date in message - message is invalid =>
     # => there is no name => return None.
 
+    if (name == ""):
+        name = None
+
     return name
 
 def normalize_date(date_string, sep="."):
