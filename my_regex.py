@@ -2,7 +2,8 @@ import re
 
 # Date regex
 def get_date_regex():
-    begin_of_match = "(?<!\S)" # There is no not-space symbols before the match
+    # There is no not-space symbols before the match
+    begin_of_match = "(?<!\S)"
     end_of_match = "(?!\S)" # "(?=\s|$)" # ---||--- after the match
     sep = "[ .,-/]"
     day = "(?:[0]?[1-9]|[12]\d|3[01])"
@@ -36,11 +37,10 @@ def get_phone_regex():
 
     return phone_regex
 
-# MyRegex - container with regex-s values for date, nickname and phone
-class MyRegex:
-    date = get_date_regex()
-    nickname = get_nickname_regex()
-    phone = get_phone_regex()
+# Global regex CONSTANTS
+date_regex = get_date_regex()
+nickname_regex = get_nickname_regex()
+phone_regex = get_phone_regex()
 
 # Functions
 def remove_comas_from_message(message_string):
@@ -50,7 +50,7 @@ def remove_comas_from_message(message_string):
 def get_date_from_message(message_string):
     message_string = remove_comas_from_message(message_string)
 
-    date = re.findall(MyRegex.date, message_string)
+    date = re.findall(date_regex, message_string)
 
     if (date != []):
         # Use first if there are several matches
@@ -63,7 +63,7 @@ def get_date_from_message(message_string):
 def get_nickname_from_message(message_string):
     message_string = remove_comas_from_message(message_string)
 
-    nickname = re.findall(MyRegex.nickname, message_string)
+    nickname = re.findall(nickname_regex, message_string)
 
     if (nickname != []):
         # Use first if there are several matches
@@ -76,7 +76,7 @@ def get_nickname_from_message(message_string):
 def get_phone_from_message(message_string):
     message_string = remove_comas_from_message(message_string)
 
-    phone = re.findall(MyRegex.phone, message_string)
+    phone = re.findall(phone_regex, message_string)
 
     if (phone != []):
         # Use first if there are several matches
@@ -164,7 +164,9 @@ def beautify_phone(phone_normal_string):
 
     # Substitute 8 by 7 in Russian phone numbers
     if (phone_beautiful[:2] == "8("):
+        phone_beautiful = list(phone_beautiful)
         phone_beautiful[0] = "7"
+        phone_beautiful = "".join(phone_beautiful)
 
     phone_beautiful = "+" + phone_beautiful
     # "+ABC(123)456-78-90"
