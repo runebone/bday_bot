@@ -58,22 +58,26 @@ def process_add_step(message):
         record = db.sample_record
 
         name = get_name_from_message(message.text)
+        msg = remove_parsed_data_from_message(message.text, name)
         record["name"] = name
 
-        date = get_date_from_message(message.text)
+        date = get_date_from_message(msg)
+        msg = remove_parsed_data_from_message(msg, date)
         date = normalize_date(date)
         date = normal_date_to_usa_format(date)
         record["date"] = date
 
         if (message_has_at_sign(message)):
             if (message_has_nickname(message)):
-                nickname = get_nickname_from_message(message.text)
+                nickname = get_nickname_from_message(msg)
+                msg = remove_parsed_data_from_message(msg, nickname)
                 record["nickname"] = nickname[1:] # Store nickname without @
             else:
                 raise InvalidNickname
 
         if (message_has_phone(message)):
-            phone = get_phone_from_message(message.text)
+            phone = get_phone_from_message(msg)
+            msg = remove_parsed_data_from_message(msg, phone)
             phone = normalize_phone(phone)
             record["phone"] = phone
 
@@ -114,6 +118,10 @@ def message_has_phone(message):
     if (phone == None):
         return False
     return True
+
+def remove_parsed_data_from_message(message_string, data):
+    return "".join(message_string.split(data))
+
 # === END OF PROCESS_ADD_STEP
 
 def process_delete_step(message):
