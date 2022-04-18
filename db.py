@@ -94,6 +94,25 @@ class Database:
 
             self.dump(database)
 
+    def get_record_by_index(self, chat_id, record_index):
+        chat_id = str(chat_id)
+        database = self.load()
+        users = self.get_users_list_from_dict(database)
+
+        if (chat_id not in users):
+            raise NewUserHasNoRecords
+        elif (self.get_user_records_from_dict(database, chat_id) == []):
+            raise UserHasNoRecords
+        else:
+            # df - user records dataframe
+            df = pd.DataFrame(self.get_user_records_from_dict(database, \
+                                                                chat_id))
+            df = df.sort_values(by="date").reset_index(drop=True)
+            df = df.loc[[record_index]] # Get record
+            df = df.to_dict(orient="records")
+
+            return df
+
     # TODO: sort by field without loading. sort by table keys (indexes).
     # TODO: load single record without loading whole db.
 
@@ -110,4 +129,4 @@ if __name__ == "__main__":
 
     #db.add_new_record(317823738, record)
     #db.delete_record_by_index(317823738, 1)
-    print(db.get_user_records(317823738))
+    print(db.get_record_by_index(440058642, 1))
