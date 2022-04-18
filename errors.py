@@ -5,7 +5,7 @@ class Error(Exception):
 class MessageTooLarge(Error):
     text = "Message is too large."
 class NoNameInTheBeginning(Error):
-    text = "Message should start with name."
+    text = "Message should start with name and contain date."
 class NoDate(Error):
     text = "Message should contain date."
 class InvalidNickname(Error):
