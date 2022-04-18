@@ -1,6 +1,9 @@
 #!/usr/bin/python
 import telebot
 from my_regex import *
+from config import BotText
+from errors import *
+from db import Database
 
 # TODO: Сделать клаву с командами, чтобы бабки могли пользоваться
 
@@ -9,29 +12,6 @@ with open(".API_TOKEN") as f:
     API_TOKEN = f.readline()[:-1]
 
 bot = telebot.TeleBot(API_TOKEN)
-# config.py ===============================================
-from enum import Enum
-
-class BotText(Enum):
-    START = "Start message example."
-    ADD = "Add message example."
-    SHOW = "Show message example."
-    DELETE = "Delete message example."
-    EDIT = "Edit message example."
-
-# error.py ===============================================
-class Error(Exception):
-    """Base class for custom exceptions."""
-    pass
-
-class MessageTooLarge(Error):
-    text = "Message is too large."
-class NoNameInTheBeginning(Error):
-    text = "Message should start with name."
-class NoDate(Error):
-    text = "Message should contain date."
-class InvalidNickname(Error):
-    text = "Nickname should be from 5 to 32 characters long."
 
 # const.py ===============================================
 class Const: # TODO: from const.py import *; remove Const class
@@ -42,6 +22,8 @@ class Const: # TODO: from const.py import *; remove Const class
 @bot.message_handler(commands=["start", "help"])
 def start(message):
     bot.send_message(message.chat.id, BotText.START.value)
+    bot.send_message(message.chat.id, message.chat.id)
+    bot.send_message(message.chat.id, type(message.chat.id))
 
 @bot.message_handler(commands=["add"])
 def add(message):
@@ -70,13 +52,18 @@ def process_add_step(message):
         assert_message_has_name_in_the_beginning(message)
         assert_message_has_date(message)
 
+        # name -> database
+        # date -> normalize -> database
+
         if (message_has_at_sign(message)):
             if (message_has_nickname(message)):
+                pass
                 # nickname -> database
             else:
                 raise InvalidNickname
 
         if (message_has_phone(message)):
+            pass
             # phone -> normalize -> beautify -> database
 
     except Exception as e:
