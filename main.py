@@ -6,7 +6,7 @@ from config import *
 from db import Database
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-# Initialize database
+# Initialize database; global constant
 db = Database()
 
 # TODO: Сделать клаву с командами, чтобы бабки могли пользоваться
@@ -16,10 +16,6 @@ with open(".API_TOKEN") as f:
     API_TOKEN = f.readline()[:-1]
 
 bot = telebot.TeleBot(API_TOKEN)
-
-# const.py ===============================================
-class Const: # TODO: from const.py import *; remove Const class
-    MAX_MESSAGE_LENGTH = 256
 
 # ===============================================
 
