@@ -55,6 +55,8 @@ class Database:
     def add_user_record_to_dict(self, database_dict, chat_id_str, record_dict):
         if (record_dict not in database_dict[self.users][0][chat_id_str]):
             database_dict[self.users][0][chat_id_str].append(record_dict)
+        else:
+            raise RecordAlreadyExists
 
     def add_new_user_to_dict(self, database_dict, chat_id_str):
         database_dict[self.users][0][chat_id_str] = []
