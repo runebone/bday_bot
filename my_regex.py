@@ -67,7 +67,7 @@ def get_nickname_from_message(message_string):
 
     if (nickname != []):
         # Use first if there are several matches
-        nickname = nickname[0][1:] # Skip @ sign
+        nickname = nickname[0]
     else:
         nickname = None
 
