@@ -102,7 +102,7 @@ def get_name_from_message(message_string):
             name = name.split(nickname)[0]
         if (phone != None):
             name = name.split(phone)[0]
-        name.strip(" .,/")
+        name = name.strip(" .,/")
 
     # If there is no date in message - message is invalid =>
     # => there is no name => return None.
