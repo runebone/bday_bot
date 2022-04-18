@@ -130,18 +130,21 @@ def process_delete_step(message):
         pass
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
+        bot.register_next_step_handler(message, process_delete_step)
 
 def process_show_step(message):
     try:
         pass
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
+        bot.register_next_step_handler(message, process_show_step)
 
 def process_edit_step(message):
     try:
         pass
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
+        bot.register_next_step_handler(message, process_edit_step)
 
 # ===============================================
 bot.infinity_polling() # Keeps checking for messages
