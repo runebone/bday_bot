@@ -159,6 +159,10 @@ def beautify_phone(phone_normal_string):
     if (phone_normal_string[:-10] == ""):
         phone_beautiful = "7" + phone_beautiful
 
+    # Substitute 8 by 7 in Russian phone numbers
+    if (phone_beautiful[:2] == "8("):
+        phone_beautiful[0] = "7"
+
     phone_beautiful = "+" + phone_beautiful
     # "+ABC(123)456-78-90"
 
