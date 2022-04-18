@@ -87,6 +87,7 @@ def process_add_step(message):
 
     except Exception as e:
         bot.send_message(message.chat.id, e.text)
+        bot.register_next_step_handler(message, process_add_step)
 
 def assert_message_has_valid_length(message):
     if (len(message.text) > Const.MAX_MESSAGE_LENGTH):
