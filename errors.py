@@ -16,3 +16,5 @@ class UserHasNoRecords(Error):
     text = "User has no records."
 class NewUserHasNoRecords(Error):
     text = "New user has no records."
+class RecordIndexOutOfRange(Error):
+    text = "Record index out of range."

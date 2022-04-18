@@ -80,8 +80,13 @@ class Database:
 
         if (chat_id not in users):
             raise NewUserHasNoRecords
-        elif (self.get_user_records_from_dict(database, chat_id) == []):
+        else:
+            user_records = self.get_user_records_from_dict(database, chat_id)
+
+        if (user_records == []):
             raise UserHasNoRecords
+        elif (len(user_records) <= record_index):
+            raise RecordIndexOutOfRange
         else:
             # df - user records dataframe
             df = pd.DataFrame(self.get_user_records_from_dict(database, \
@@ -101,8 +106,13 @@ class Database:
 
         if (chat_id not in users):
             raise NewUserHasNoRecords
-        elif (self.get_user_records_from_dict(database, chat_id) == []):
+        else:
+            user_records = self.get_user_records_from_dict(database, chat_id)
+
+        if (user_records == []):
             raise UserHasNoRecords
+        elif (len(user_records) <= record_index):
+            raise RecordIndexOutOfRange
         else:
             # df - user records dataframe
             df = pd.DataFrame(self.get_user_records_from_dict(database, \
