@@ -1,6 +1,6 @@
-from enum import Enum
+# from enum import Enum
 
-class BotText(Enum):
+class BotText:
     START = "Start message example."
     ADD = "Add message example."
     SHOW = "Show message example."
@@ -11,7 +11,7 @@ class BotText(Enum):
     DELETE_SUCCESS = "Запись успешно удалена."
     EDIT_SUCCESS = "Запись успешно изменена."
 
-class FailText(Enum):
+class FailText:
     MessageTooLarge = "Сообщение слишком длинное."
     NoNameInTheBeginning = "Сообщение должно начинаться с имени \
             поздравляемого и содержать дату."
@@ -23,6 +23,11 @@ class FailText(Enum):
             Чтобы добавить запись, напишите /add." # TODO: offer ADD
     RecordIndexOutOfRange = "У вас нет такой записи." #TODO: offer SHOW
     RecordAlreadyExists = "У вас уже есть такая запись."
+
+# ==================================================
+
+class Const:
+    MAX_MESSAGE_LENGTH = 256
 
 # ==================================================
 
