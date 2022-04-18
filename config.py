@@ -6,3 +6,5 @@ class BotText(Enum):
     SHOW = "Show message example."
     DELETE = "Delete message example."
     EDIT = "Edit message example."
+
+    ADD_SUCCESS = "Record has been successfully added."
