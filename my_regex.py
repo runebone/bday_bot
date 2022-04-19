@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 # Date regex
 def get_date_regex():
@@ -8,7 +9,7 @@ def get_date_regex():
     sep = "[ .,-/]"
     day = "(?:[0]?[1-9]|[12]\d|3[01])"
     month = "(?:[0]?[1-9]|1[0-2])"
-    year = "(?:19\d\d|20\d\d|\d\d)"
+    year = "(?:19\d\d|20\d\d|\d\d|\d)"
     date = "(?:" + day + sep + month + sep + year + "|" \
             + day + sep + month + ")"
     date_regex = begin_of_match + date + end_of_match
@@ -112,16 +113,30 @@ def get_name_from_message(message_string):
 
     return name
 
+# XXX
 def normalize_date(date_string, sep="."):
-    date_normal = date_string
+    date = date_string
 
-    date_normal = sep.join(date_normal.split(" "))
-    date_normal = sep.join(date_normal.split("."))
-    date_normal = sep.join(date_normal.split(","))
-    date_normal = sep.join(date_normal.split("-"))
-    date_normal = sep.join(date_normal.split("/"))
+    date = sep.join(date.split(" "))
+    date = sep.join(date.split("."))
+    date = sep.join(date.split(","))
+    date = sep.join(date.split("-"))
+    date = sep.join(date.split("/"))
 
-    return date_normal
+    date = date.split(sep)
+    date = list(map(lambda word: "{:02d}".format(int(word)), date))
+
+    if (len(date) == 3 and len(date[2]) < 3):
+        current_year = str(datetime.today().year)[2:]
+        year = date[2]
+        if (int(current_year) > int(year)):
+            date[2] = "20" + date[2]
+        else:
+            date[2] = "19" + date[2]
+
+    date = sep.join(date)
+
+    return date
 
 def normal_date_to_usa_format(date_normal):
     # DD.MM.YYYY -> MM-DD-YYYY
@@ -166,16 +181,17 @@ def beautify_phone(phone_normal_string):
 
     # If phone number does not contain country code - use Russia by default
     if (phone_normal_string[:-10] == ""):
-        phone_beautiful = "7" + phone_beautiful
+        phone_beautiful = "8" + phone_beautiful
 
     # Substitute 8 by 7 in Russian phone numbers
     if (phone_beautiful[:2] == "8("):
-        phone_beautiful = list(phone_beautiful)
-        phone_beautiful[0] = "7"
-        phone_beautiful = "".join(phone_beautiful)
-
-    phone_beautiful = "+" + phone_beautiful
-    # "+ABC(123)456-78-90"
+        pass
+        # phone_beautiful = list(phone_beautiful)
+        # phone_beautiful[0] = "7"
+        # phone_beautiful = "".join(phone_beautiful)
+    else:
+        phone_beautiful = "+" + phone_beautiful
+        # "+ABC(123)456-78-90"
 
     return phone_beautiful
 
