@@ -1,5 +1,5 @@
 .API_TOKEN
+pyTelegramBotAPI/
 **/__pycache__/**
-**/pyTelegramBotAPI/**
 **/tmp/**
 *.json
