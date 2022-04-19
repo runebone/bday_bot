@@ -8,7 +8,8 @@ def process_add_step(message, bot, db):
         assert_message_has_name_in_the_beginning(message)
         assert_message_has_date(message)
 
-        record = db.sample_record
+        # Don't interpret record and db.sample_record as the same thing
+        record = dict(db.sample_record)
 
         name = get_name_from_message(message.text)
         msg = remove_parsed_data_from_message(message.text, name)
