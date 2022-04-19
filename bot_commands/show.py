@@ -10,6 +10,10 @@ def process_show_step(message, bot, db):
             string = get_output_string(records[i], i)
             bot.send_message(message.chat.id, string)
 
+        # Choose action
+        bot.send_message(message.chat.id, BotText.CHOOSE_ACTION, \
+                reply_markup=gen_default_actions_markup())
+
     # FIXME: DRY
     except UserHasNoRecords:
         bot.send_message(message.chat.id, FailText.UserHasNoRecords)
