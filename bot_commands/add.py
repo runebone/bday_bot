@@ -2,6 +2,7 @@ from bot_commands.common import *
 
 def process_add_step(message, bot, db):
     try:
+        assert_message_is_not_command(message)
         assert_message_has_valid_length(message)
         assert_message_has_name_in_the_beginning(message)
         assert_message_has_date(message)
@@ -39,6 +40,8 @@ def process_add_step(message, bot, db):
                 reply_markup=gen_default_actions_markup())
 
     # FIXME: DRY
+    except MessageIsCommand:
+        bot.send_message(message.chat.id, "Вы вышли из режима добавления. Введите команду {} повторно, чтобы исполнить её.".format(message.text))
     except MessageTooLarge:
         bot.send_message(message.chat.id, FailText.MessageTooLarge)
         bot.register_next_step_handler(message, process_add_step, bot, db)
@@ -60,6 +63,10 @@ def process_add_step(message, bot, db):
 
         tb = sys.exc_info()[2]
         raise e.with_traceback(tb)
+
+def assert_message_is_not_command(message):
+    if (message_is_command(message)):
+        raise MessageIsCommand
 
 def assert_message_has_valid_length(message):
     if (len(message.text) > Const.MAX_MESSAGE_LENGTH):
