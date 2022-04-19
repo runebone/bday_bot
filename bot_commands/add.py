@@ -42,6 +42,7 @@ def process_add_step(message, bot, db):
     # FIXME: DRY
     except MessageIsCommand:
         bot.send_message(message.chat.id, "Вы вышли из режима добавления. Введите команду {} повторно, чтобы исполнить её.".format(message.text))
+        default(message, bot)
     except MessageTooLarge:
         bot.send_message(message.chat.id, FailText.MessageTooLarge)
         bot.register_next_step_handler(message, process_add_step, bot, db)
