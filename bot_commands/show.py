@@ -13,14 +13,11 @@ def process_show_step(message, bot, db):
     # FIXME: DRY
     except UserHasNoRecords:
         bot.send_message(message.chat.id, FailText.UserHasNoRecords)
+    except NewUserHasNoRecords:
+        bot.send_message(message.chat.id, FailText.NewUserHasNoRecords)
     except Exception as e:
         bot.send_message(message.chat.id, \
                 FailText.UncaughtError.format(str(e)))
 
         tb = sys.exc_info()[2]
         raise e.with_traceback(tb)
-
-def assert_user_has_records(message, db):
-    records = db.get_user_records(message.chat.id)
-    if (len(records) == 0):
-        raise UserHasNoRecords
