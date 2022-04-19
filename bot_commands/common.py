@@ -48,7 +48,7 @@ def gen_add_friend_markup():
     markup = InlineKeyboardMarkup()
     markup.row_width = 1
     markup.add(InlineKeyboardButton("Добавить друга", \
-            callback_data="cb_add_friend"))
+            callback_data="cb_add_command"))
     return markup
 
 def gen_default_actions_markup():
