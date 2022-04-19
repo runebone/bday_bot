@@ -129,6 +129,12 @@ def normal_date_to_usa_format(date_normal):
     date[0], date[1] = date[1], date[0]
     return "-".join(date)
 
+def us_date_to_ru_format(date):
+    date = date.split("-")
+    date[0], date[1] = date[1], date[0]
+    date = ".".join(date)
+    return date
+
 def normalize_phone(phone_string):
     phone_normal = phone_string
 
@@ -174,8 +180,11 @@ def beautify_phone(phone_normal_string):
     return phone_beautiful
 
 if __name__ == "__main__":
-    print("Date regex:\n%s\n" % MyRegex.date)
-    print("Nickname regex:\n%s\n" % MyRegex.nickname)
-    print("Phone regex:\n%s\n" % MyRegex.phone)
+    print("Date regex:\n%s\n" % date_regex)
+    print("Nickname regex:\n%s\n" % nickname_regex)
+    print("Phone regex:\n%s\n" % phone_regex)
     message = input("Input message: ")
-    print(get_nickname_from_message(message))
+    print("Name: ", get_name_from_message(message))
+    print("Date: ", get_date_from_message(message))
+    print("Nickname: ", get_nickname_from_message(message))
+    print("Phone: ", get_phone_from_message(message))
