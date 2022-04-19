@@ -20,6 +20,8 @@ class BotText:
     DELETE = "Delete message example."
     EDIT = "Edit message example."
 
+    CHOOSE_ACTION = "Выберите действие."
+
     ADD_SUCCESS = "Запись успешно добавлена."
     DELETE_SUCCESS = "Запись успешно удалена."
     EDIT_SUCCESS = "Запись успешно изменена."
