@@ -43,3 +43,8 @@ def gen_edit_markup():
     markup.add(InlineKeyboardButton("Изменить", callback_data="cb_edit"), \
             InlineKeyboardButton("Удалить", callback_data="cb_delete"))
     return markup
+
+def assert_user_has_records(message, db):
+    records = db.get_user_records(message.chat.id)
+    if (len(records) == 0):
+        raise UserHasNoRecords
