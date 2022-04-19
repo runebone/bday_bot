@@ -21,6 +21,7 @@ class BotText:
     EDIT = "Edit message example."
 
     CHOOSE_ACTION = "Выберите действие."
+    CHOOSE_RECORD = "Выберите запись."
     YOU_HAVE_CHOSEN_TO_DELETE = "*Вы выбрали:*\n\n{}"
 
     ADD_SUCCESS = "Запись успешно добавлена."
