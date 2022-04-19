@@ -24,12 +24,13 @@ bot = telebot.TeleBot(API_TOKEN)
 
 # ===============================================
 
+@bot.message_handler(commands=["default", "help"])
 @bot.message_handler(func=lambda message: not message_is_command(message))
 def default(message):
     bot.send_message(message.chat.id, BotText.CHOOSE_ACTION,\
             reply_markup=gen_default_actions_markup())
 
-@bot.message_handler(commands=["start", "help"])
+@bot.message_handler(commands=["start"])
 def start(message):
     bot.send_message(message.chat.id, BotText.START, \
             parse_mode="Markdown", \
