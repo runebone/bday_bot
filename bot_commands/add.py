@@ -37,9 +37,24 @@ def process_add_step(message, bot, db):
 
         bot.send_message(message.chat.id, BotText.ADD_SUCCESS)
 
-    except Exception as e:
-        bot.send_message(message.chat.id, e.text)
+    # FIXME: DRY
+    except MessageTooLarge:
+        bot.send_message(message.chat.id, FailText.MessageTooLarge)
         bot.register_next_step_handler(message, process_add_step, bot, db)
+    except NoNameInTheBeginning:
+        bot.send_message(message.chat.id, FailText.NoNameInTheBeginning)
+        bot.register_next_step_handler(message, process_add_step, bot, db)
+    except NoDate:
+        bot.send_message(message.chat.id, FailText.NoDate)
+        bot.register_next_step_handler(message, process_add_step, bot, db)
+    except InvalidNickname:
+        bot.send_message(message.chat.id, FailText.InvalidNickname)
+        bot.register_next_step_handler(message, process_add_step, bot, db)
+    except RecordAlreadyExists:
+        bot.send_message(message.chat.id, FailText.RecordAlreadyExists)
+        bot.register_next_step_handler(message, process_add_step, bot, db)
+    except Exception as e:
+        bot.send_message(message.chat.id, FailText.UncaughtError.format(str(e)))
 
 def assert_message_has_valid_length(message):
     if (len(message.text) > Const.MAX_MESSAGE_LENGTH):
@@ -73,4 +88,5 @@ def message_has_phone(message):
     return True
 
 def remove_parsed_data_from_message(message_string, data):
-    return "".join(message_string.split(data))
+    return re.sub(data, "", message_string, count=1)
+    # return "".join(message_string.split(data)) # BUG: 1 12-12-2001; replaces 1s in date
