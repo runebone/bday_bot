@@ -15,31 +15,25 @@ class Config:
 
 class BotText:
     START = "Вас приветствует *Happy Birthday Bot*!\nДавайте приступим!"
-    ADD = "Введите имя человека и его дату рождения (числами). По желанию можете ввести также его никнейм в телеграм через \"@\" и/или номер телефона."
+    ADD = "*Введите:*\n1. Имя человека\n2. Дату рождения в формате `DD.MM` или `DD.MM.YYYY`\n3. Ник в телеграме через *@* (по желанию)\n4. Номер телефона (по желанию)\n\nЧтобы получить пример правильного сообщения, напишите /example, или нажмите на кнопку ниже."
     SHOW = "Show message example."
     DELETE = "Delete message example."
     EDIT = "Edit message example."
 
     CHOOSE_ACTION = "Выберите действие."
+    YOU_HAVE_CHOSEN_TO_DELETE = "*Вы выбрали:*\n\n{}"
 
     ADD_SUCCESS = "Запись успешно добавлена."
     DELETE_SUCCESS = "Запись успешно удалена."
     EDIT_SUCCESS = "Запись успешно изменена."
 
     output = {
-            "index": "[ №{} ]",
+            "index": "№{}",
             "name": "Имя: {}",
             "date": "Дата рождения: {}",
             "nickname": "Никнейм: @{}",
             "phone": "Номер телефона: {}"
     }
-
-    examples = list(map(lambda example: "Пример:\n\n" + example,
-        [
-            "Иван 12.12.2012 @forgot_birthday_bot 81234567890",
-            "Петя Петров 9.4.1997"
-        ]
-    ))
 
 class FailText:
     MessageTooLarge = "Сообщение слишком длинное."
@@ -67,6 +61,7 @@ class Const:
 
 class Error(Exception): pass
 """Base class for custom exceptions."""
+class MessageIsCommand(Error): pass
 class MessageTooLarge(Error): pass
 class NoNameInTheBeginning(Error): pass
 class NoDate(Error): pass
