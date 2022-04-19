@@ -9,9 +9,15 @@ def process_show_step(message, bot, db):
             string = get_printable_string_from_record(records[i], i)
             bot.send_message(message.chat.id, string)
 
-    except Exception as e:
-        bot.send_message(message.chat.id, e.text)
+    # FIXME: DRY
+    except UserHasNoRecords:
+        bot.send_message(message.chat.id, FailText.UserHasNoRecords)
         bot.register_next_step_handler(message, process_show_step, bot, db)
+    except NewUserHasNoRecords:
+        bot.send_message(message.chat.id, FailText.NewUserHasNoRecords)
+        bot.register_next_step_handler(message, process_show_step, bot, db)
+    except Exception as e:
+        bot.send_message(message.chat.id, FailText.UncaughtError.format(str(e)))
 
 def get_printable_string_from_record(record, index):
     date = us_date_to_ru_format(record["date"])

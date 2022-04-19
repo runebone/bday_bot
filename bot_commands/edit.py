@@ -4,9 +4,9 @@ from config import *
 def process_edit_step(message, bot, db):
     try:
         pass
+
     except Exception as e:
-        bot.send_message(message.chat.id, e.text)
-        bot.register_next_step_handler(message, process_edit_step, bot, db)
+        bot.send_message(message.chat.id, FailText.UncaughtError.format(str(e)))
 
 def gen_edit_markup():
     markup = InlineKeyboardMarkup()
