@@ -35,7 +35,8 @@ def process_add_step(message, bot, db):
 
         db.add_new_record(message.chat.id, record)
 
-        bot.send_message(message.chat.id, BotText.ADD_SUCCESS)
+        bot.send_message(message.chat.id, BotText.ADD_SUCCESS, \
+                reply_markup=gen_default_actions_markup())
 
     # FIXME: DRY
     except MessageTooLarge:
