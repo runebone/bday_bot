@@ -15,7 +15,7 @@ class Config:
 
 class BotText:
     START = "Start message example."
-    ADD = "Add message example."
+    ADD = "Введите имя человека и его дату рождения (числами). По желанию можете ввести также его никнейм в телеграм через \"@\" и/или номер телефона."
     SHOW = "Show message example."
     DELETE = "Delete message example."
     EDIT = "Edit message example."
@@ -31,6 +31,13 @@ class BotText:
             "nickname": "Никнейм: @{}",
             "phone": "Номер телефона: {}"
     }
+
+    examples = list(map(lambda example: "Пример:\n\n" + example,
+        [
+            "Иван 12.12.2012 @forgot_birthday_bot 81234567890",
+            "Петя Петров 9.4.1997"
+        ]
+    ))
 
 class FailText:
     MessageTooLarge = "Сообщение слишком длинное."
