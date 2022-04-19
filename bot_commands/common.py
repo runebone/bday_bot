@@ -12,7 +12,7 @@ def message_is_command(message):
             "edit", "change"
             "cancel"
             ]
-    commands = map(lambda word: "/" + word, commands)
+    commands = list(map(lambda word: "/" + word, commands))
 
     if (message.text in commands):
         return True
