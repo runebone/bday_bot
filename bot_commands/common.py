@@ -3,7 +3,7 @@ from my_regex import *
 from config import *
 import sys
 
-def message_text_is_command(message_text):
+def message_is_command(message):
     commands = [
             "start", "help"
             "add",
@@ -14,7 +14,7 @@ def message_text_is_command(message_text):
             ]
     commands = map(lambda word: "/" + word, commands)
 
-    if (message_text in commands):
+    if (message.text in commands):
         return True
     return False
 
