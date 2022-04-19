@@ -1,6 +1,4 @@
-from my_regex import *
-from config import *
-import sys
+from bot_commands.common import *
 
 def process_add_step(message, bot, db):
     try:
@@ -56,8 +54,10 @@ def process_add_step(message, bot, db):
         bot.send_message(message.chat.id, FailText.RecordAlreadyExists)
         bot.register_next_step_handler(message, process_add_step, bot, db)
     except Exception as e:
+        bot.send_message(message.chat.id, \
+                FailText.UncaughtError.format(str(e)))
+
         tb = sys.exc_info()[2]
-        bot.send_message(message.chat.id, FailText.UncaughtError.format(str(e)))
         raise e.with_traceback(tb)
 
 def assert_message_has_valid_length(message):
