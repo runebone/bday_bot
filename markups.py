@@ -24,9 +24,7 @@ def gen_default_actions_markup():
                 callback_data="cb_add_command"),
             InlineKeyboardButton("Посмотреть список",
                 callback_data="cb_show_command"),
-            InlineKeyboardButton("Изменить",
-                callback_data="cb_edit_command"),
-            InlineKeyboardButton("Удалить",
+            InlineKeyboardButton("Изменить / Удалить",
                 callback_data="cb_delete_command"))
     return markup
 
