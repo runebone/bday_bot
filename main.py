@@ -101,6 +101,7 @@ def callback_query(call):
 
             db.delete_record_by_record(call.message.chat.id, record)
             bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
+            default(call.message)
         elif call.data == "cb_edit":
             bot.send_message(call.message.chat.id, "Edit.")
             index = get_index_from_bot_message(call.message)
