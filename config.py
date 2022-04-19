@@ -44,6 +44,7 @@ class FailText:
             Чтобы добавить запись, напишите /add." # TODO: offer ADD
     RecordIndexOutOfRange = "У вас нет такой записи." #TODO: offer SHOW
     RecordAlreadyExists = "У вас уже есть такая запись."
+    RecordNotFound = "Запись не найдена."
 
     UncaughtError = "Непойманная ошибка: {}."
 
@@ -65,3 +66,4 @@ class UserHasNoRecords(Error): pass
 class NewUserHasNoRecords(Error): pass
 class RecordIndexOutOfRange(Error): pass
 class RecordAlreadyExists(Error): pass
+class RecordNotFound(Error): pass
