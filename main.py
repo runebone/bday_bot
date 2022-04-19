@@ -3,6 +3,7 @@ import re
 import sys
 import telebot
 import bot_commands as bc
+from bot_commands.common import *
 from db import Database
 from config import *
 from my_regex import *
@@ -24,7 +25,9 @@ bot = telebot.TeleBot(API_TOKEN)
 
 @bot.message_handler(commands=["start", "help"])
 def start(message):
-    bot.send_message(message.chat.id, BotText.START, parse_mode="Markdown")
+    bot.send_message(message.chat.id, BotText.START, \
+            parse_mode="Markdown", \
+            reply_markup=gen_add_friend_markup())
 
 @bot.message_handler(commands=["add"])
 def add(message):
@@ -73,6 +76,8 @@ def callback_query(call):
 
             db.delete_record_by_record(call.message.chat.id, record)
             bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
+        elif call.data == "cb_add_friend":
+            add(call.message)
 
     except RecordNotFound:
         bot.send_message(call.message.chat.id, FailText.RecordNotFound)
