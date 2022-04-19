@@ -44,6 +44,13 @@ def gen_edit_markup():
             InlineKeyboardButton("Удалить", callback_data="cb_delete"))
     return markup
 
+def gen_add_friend_markup():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 1
+    markup.add(InlineKeyboardButton("Добавить друга", \
+            callback_data="cb_add_friend"))
+    return markup
+
 def assert_user_has_records(message, db):
     records = db.get_user_records(message.chat.id)
     if (len(records) == 0):
