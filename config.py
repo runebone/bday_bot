@@ -34,14 +34,15 @@ class BotText:
 
 class FailText:
     MessageTooLarge = "Сообщение слишком длинное."
-    NoNameInTheBeginning = "Сообщение должно начинаться с имени \
-            поздравляемого и содержать дату."
+    NoNameInTheBeginning = "Сообщение должно начинаться с имени " \
+            "поздравляемого и содержать дату."
     NoDate = "Сообщение должно содержать дату."
     InvalidNickname = "Ник должен быть не короче 5 и не длиннее 32 символов."
     InvalidRecordFields = "InvalidRecordFields."
-    UserHasNoRecords = "У вас нет записей." # TODO: offer ADD
-    NewUserHasNoRecords = "У вас нет записей. \
-            Чтобы добавить запись, напишите /add." # TODO: offer ADD
+    UserHasNoRecords = "У вас нет записей. " \
+    "Чтобы добавить запись, напишите /add."
+    NewUserHasNoRecords = "У вас нет записей. " \
+    "Чтобы добавить запись, напишите /add."
     RecordIndexOutOfRange = "У вас нет такой записи." #TODO: offer SHOW
     RecordAlreadyExists = "У вас уже есть такая запись."
     RecordNotFound = "Запись не найдена."
