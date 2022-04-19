@@ -7,6 +7,7 @@ from bot_commands.common import *
 from db import Database
 from config import *
 from my_regex import *
+from example import get_example
 
 # Initialize database; global constant
 db = Database(Config.Database.file)
@@ -36,8 +37,9 @@ def start(message):
 
 @bot.message_handler(commands=["add"])
 def add(message):
-    bot.send_message(message.chat.id, BotText.ADD)
-    bot.send_message(message.chat.id, BotText.examples[0])
+    bot.send_message(message.chat.id, BotText.ADD, \
+            parse_mode="Markdown", \
+            reply_markup=gen_example_markup())
     bot.register_next_step_handler(message, bc.add.process_add_step, bot, db)
 
 @bot.message_handler(commands=["delete", "cut"])
@@ -52,14 +54,31 @@ def show(message):
 def edit(message):
     bc.edit.process_edit_step(message, bot, db)
 
+@bot.message_handler(commands=["example"])
+def example(message):
+    bot.send_message(message.chat.id, get_example())
+
 # Callbacks for all functions
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
     try:
-        if call.data == "cb_edit":
-            bot.send_message(call.message.chat.id, "Edit.")
-            index = get_index_from_bot_message(call.message)
-        elif call.data == "cb_delete":
+        if call.data == "cb_cancel":
+            default(call.message)
+        elif call.data == "cb_add_command":
+            add(call.message)
+        elif call.data == "cb_show_command":
+            show(call.message)
+        elif call.data == "cb_edit_command":
+            edit(call.message)
+        elif call.data == "cb_delete_command":
+            delete(call.message)
+        elif call.data == "cb_example_command":
+            example(call.message)
+
+        elif call.data == "cb_delete_record":
+            db = get_database()
+            bc.delete.process_confirm_deletion_step(call.message, bot, db)
+        elif call.data == "cb_confirm_deletion":
             db = get_database()
 
             name = get_name_from_output_message_text(call.message.text)
@@ -81,14 +100,9 @@ def callback_query(call):
 
             db.delete_record_by_record(call.message.chat.id, record)
             bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
-        elif call.data == "cb_add_command":
-            add(call.message)
-        elif call.data == "cb_show_command":
-            show(call.message)
-        elif call.data == "cb_edit_command":
-            edit(call.message)
-        elif call.data == "cb_delete_command":
-            delete(call.message)
+        elif call.data == "cb_edit":
+            bot.send_message(call.message.chat.id, "Edit.")
+            index = get_index_from_bot_message(call.message)
 
     except RecordNotFound:
         bot.send_message(call.message.chat.id, FailText.RecordNotFound)
