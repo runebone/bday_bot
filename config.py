@@ -14,7 +14,7 @@ class Config:
         users = "user_data"
 
 class BotText:
-    START = "Start message example."
+    START = "Вас приветствует *Happy Birthday Bot*!\nДавайте приступим!"
     ADD = "Введите имя человека и его дату рождения (числами). По желанию можете ввести также его никнейм в телеграм через \"@\" и/или номер телефона."
     SHOW = "Show message example."
     DELETE = "Delete message example."
