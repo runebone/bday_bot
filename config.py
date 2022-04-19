@@ -24,6 +24,14 @@ class BotText:
     DELETE_SUCCESS = "Запись успешно удалена."
     EDIT_SUCCESS = "Запись успешно изменена."
 
+    output = {
+            "index": "[ №{} ]",
+            "name": "Имя: {}",
+            "date": "Дата рождения: {}",
+            "nickname": "Никнейм: @{}",
+            "phone": "Номер телефона: {}"
+    }
+
 class FailText:
     MessageTooLarge = "Сообщение слишком длинное."
     NoNameInTheBeginning = "Сообщение должно начинаться с имени \
