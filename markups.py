@@ -39,7 +39,9 @@ def gen_confirm_deletion_markup():
 
 def gen_example_markup():
     markup = InlineKeyboardMarkup()
-    markup.row_width = 1
-    markup.add(InlineKeyboardButton("Пример", \
-            callback_data="cb_example_command"))
+    markup.row_width = 2
+    markup.add(InlineKeyboardButton("Отмемна", \
+                callback_data="cb_cancel"),
+            InlineKeyboardButton("Пример",
+                callback_data="cb_example_command"))
     return markup
