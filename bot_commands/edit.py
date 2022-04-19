@@ -1,16 +1,12 @@
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from config import *
+from bot_commands.common import *
 
 def process_edit_step(message, bot, db):
     try:
         pass
 
     except Exception as e:
-        bot.send_message(message.chat.id, FailText.UncaughtError.format(str(e)))
+        bot.send_message(message.chat.id, \
+                FailText.UncaughtError.format(str(e)))
 
-def gen_edit_markup():
-    markup = InlineKeyboardMarkup()
-    markup.row_width = 2
-    markup.add(InlineKeyboardButton("Изменить", callback_data="cb_edit"), \
-            InlineKeyboardButton("Удалить", callback_data="cb_delete"))
-    return markup
+        tb = sys.exc_info()[2]
+        raise e.with_traceback(tb)
