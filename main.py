@@ -23,6 +23,11 @@ bot = telebot.TeleBot(API_TOKEN)
 
 # ===============================================
 
+@bot.message_handler(func=lambda message: not message_is_command(message))
+def default(message):
+    bot.send_message(message.chat.id, "Выберите действие.",\
+            reply_markup=gen_default_actions_markup())
+
 @bot.message_handler(commands=["start", "help"])
 def start(message):
     bot.send_message(message.chat.id, BotText.START, \
@@ -76,8 +81,14 @@ def callback_query(call):
 
             db.delete_record_by_record(call.message.chat.id, record)
             bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
-        elif call.data == "cb_add_friend":
+        elif call.data == "cb_add_command":
             add(call.message)
+        elif call.data == "cb_show_command":
+            show(call.message)
+        elif call.data == "cb_edit_command":
+            edit(call.message)
+        elif call.data == "cb_delete_command":
+            delete(call.message)
 
     except RecordNotFound:
         bot.send_message(call.message.chat.id, FailText.RecordNotFound)
