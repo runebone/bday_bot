@@ -4,6 +4,9 @@ def process_delete_step(message, bot, db):
     try:
         assert_user_has_records(message, db)
 
+        bot.send_message(message.chat.id, BotText.CHOOSE_RECORD, \
+                parse_mode="Markdown")
+
         # TODO: get index from user
         records = db.get_user_records(message.chat.id)
         for i in range(len(records)):
