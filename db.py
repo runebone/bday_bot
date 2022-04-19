@@ -1,6 +1,6 @@
+from config import *
 import pandas as pd
 import json
-from config import *
 
 class Database:
     def __init__(self, file):
@@ -10,8 +10,6 @@ class Database:
         self.users = Config.Database.users
         self.empty = {self.users: [{}]}
 
-    # FIXME: load and dump funcs logic
-    # TODO: check your notes
     def load(self):
         try:
             with open(self.file) as f:
@@ -120,16 +118,5 @@ class Database:
 
             return df
 
-    # TODO: sort by field without loading. sort by table keys (indexes).
-    # TODO: load single record without loading whole db.
-
 if __name__ == "__main__":
-    db = Database()
-
-    record = {
-        "name": "humanoid",
-        "date": "12.12.1212",
-        "nickname": None,
-        "phone": "lskj",
-        "note": None
-    }
+    pass
