@@ -24,13 +24,12 @@ bot = telebot.TeleBot(API_TOKEN)
 
 @bot.message_handler(commands=["start", "help"])
 def start(message):
-    bot.send_message(message.chat.id, BotText.START)
-    bot.send_message(message.chat.id, message.chat.id)
-    bot.send_message(message.chat.id, type(message.chat.id))
+    bot.send_message(message.chat.id, BotText.START, parse_mode="Markdown")
 
 @bot.message_handler(commands=["add"])
 def add(message):
     bot.send_message(message.chat.id, BotText.ADD)
+    bot.send_message(message.chat.id, BotText.examples[0])
     bot.register_next_step_handler(message, bc.add.process_add_step, bot, db)
 
 @bot.message_handler(commands=["delete", "cut"])
