@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import re
 import telebot
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import bot_commands as bc
 from db import Database
 from config import *
@@ -47,15 +46,22 @@ def edit(message):
 # Callbacks for all functions
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
-    if call.data == "cb_edit":
-        bot.send_message(call.message.chat.id, "Edit.")
-        index = get_index_from_bot_message(call.message)
-    elif call.data == "cb_delete":
-        index = get_index_from_bot_message(call.message)
-        db = get_database()
-        db.delete_record_by_index(call.message.chat.id, index)
-        bot.send_message(call.message.chat.id, "Deleted.")
+    try:
+        if call.data == "cb_edit":
+            bot.send_message(call.message.chat.id, "Edit.")
+            index = get_index_from_bot_message(call.message)
+        elif call.data == "cb_delete":
+            index = get_index_from_bot_message(call.message)
+            db = get_database()
+            db.delete_record_by_index(call.message.chat.id, index)
+            bot.send_message(call.message.chat.id, "Deleted.")
+    except RecordIndexOutOfRange:
+        bot.send_message(call.message.chat.id, FailText.RecordIndexOutOfRange)
+        bot.register_next_step_handler(call.message, process_delete_step, bot, db)
+    except Exception as e:
+        bot.send_message(call.message.chat.id, FailText.UncaughtError.format(str(e)))
 
+# FIXME: kill it
 def get_index_from_bot_message(message):
     # Extracts index from: [ № index_number ]
     index = int(re.findall("\d", message.text)[0]) - 1
