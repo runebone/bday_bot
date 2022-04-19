@@ -37,6 +37,8 @@ class FailText:
     RecordIndexOutOfRange = "У вас нет такой записи." #TODO: offer SHOW
     RecordAlreadyExists = "У вас уже есть такая запись."
 
+    UncaughtError = "Непойманная ошибка: {}."
+
 # ==================================================
 
 class Const:
