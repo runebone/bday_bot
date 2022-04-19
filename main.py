@@ -57,7 +57,7 @@ def edit(message):
 
 @bot.message_handler(commands=["example"])
 def example(message):
-    bot.send_message(message.chat.id, get_example())
+    bot.send_message(message.chat.id, "Пример:\n" + get_example())
 
 # Callbacks for all functions
 @bot.callback_query_handler(func=lambda call: True)
