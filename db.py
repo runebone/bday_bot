@@ -94,6 +94,25 @@ class Database:
 
             self.dump(database)
 
+    def delete_record_by_record(self, chat_id, record):
+        chat_id = str(chat_id)
+        database = self.load()
+        users = self.get_users_list_from_dict(database)
+
+        if (chat_id not in users):
+            raise NewUserHasNoRecords
+        else:
+            user_records = self.get_user_records_from_dict(database, chat_id)
+
+        if (user_records == []):
+            raise UserHasNoRecords
+        else:
+            if (record not in database[self.users][0][chat_id]):
+                raise RecordNotFound
+            else:
+                database[self.users][0][chat_id].remove(record)
+                self.dump(database)
+
     def get_record_by_index(self, chat_id, record_index):
         chat_id = str(chat_id)
         database = self.load()
