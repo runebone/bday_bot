@@ -1,9 +1,11 @@
 #!/usr/bin/python
 import re
+import sys
 import telebot
 import bot_commands as bc
 from db import Database
 from config import *
+from my_regex import *
 
 # Initialize database; global constant
 db = Database(Config.Database.file)
@@ -51,21 +53,43 @@ def callback_query(call):
             bot.send_message(call.message.chat.id, "Edit.")
             index = get_index_from_bot_message(call.message)
         elif call.data == "cb_delete":
-            index = get_index_from_bot_message(call.message)
             db = get_database()
-            db.delete_record_by_index(call.message.chat.id, index)
-            bot.send_message(call.message.chat.id, "Deleted.")
-    except RecordIndexOutOfRange:
-        bot.send_message(call.message.chat.id, FailText.RecordIndexOutOfRange)
-        bot.register_next_step_handler(call.message, process_delete_step, bot, db)
-    except Exception as e:
-        bot.send_message(call.message.chat.id, FailText.UncaughtError.format(str(e)))
 
-# FIXME: kill it
-def get_index_from_bot_message(message):
-    # Extracts index from: [ № index_number ]
-    index = int(re.findall("\d", message.text)[0]) - 1
-    return index
+            name = get_name_from_output_message_text(call.message.text)
+
+            date = get_date_from_message(call.message.text)
+            date = normal_date_to_usa_format(date)
+
+            nickname = get_nickname_from_message(call.message.text)
+            if (nickname != None): nickname = nickname[1:]
+
+            phone = get_phone_from_message(call.message.text)
+            if (phone != None): phone = normalize_phone(phone)
+
+            record = dict(db.sample_record)
+            record["name"] = name
+            record["date"] = date
+            record["nickname"] = nickname
+            record["phone"] = phone
+
+            db.delete_record_by_record(call.message.chat.id, record)
+            bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
+
+    except RecordNotFound:
+        bot.send_message(call.message.chat.id, FailText.RecordNotFound)
+        bot.register_next_step_handler(call.message, \
+                bc.delete.process_delete_step, bot, db)
+    except Exception as e:
+        bot.send_message(call.message.chat.id, \
+                FailText.UncaughtError.format(str(e)))
+
+        tb = sys.exc_info()[2]
+        raise e.with_traceback(tb)
+
+def get_name_from_output_message_text(message_text):
+    pattern = "(?:Имя: )([^\n]*)"
+    name = re.findall(pattern, message_text)[0]
+    return name
 
 # ===============================================
 
