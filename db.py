@@ -64,7 +64,13 @@ class Database:
     def get_user_records(self, chat_id):
         chat_id = str(chat_id)
         database = self.load()
-        user_records = self.get_user_records_from_dict(database, chat_id)
+        users = self.get_users_list_from_dict(database)
+
+        if (chat_id in users):
+            user_records = self.get_user_records_from_dict(database, chat_id)
+        else:
+            self.add_new_user_to_dict(database, chat_id)
+            raise NewUserHasNoRecords
 
         return user_records
 
