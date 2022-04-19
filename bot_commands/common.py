@@ -3,6 +3,11 @@ from config import *
 from markups import *
 import sys
 
+# FIXME: copied from main.py to use in add; idk yet how to fix it
+def default(message, bot):
+    bot.send_message(message.chat.id, BotText.CHOOSE_ACTION,\
+            reply_markup=gen_default_actions_markup())
+
 def message_is_command(message):
     commands = [
             "start", "help",
