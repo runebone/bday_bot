@@ -10,7 +10,8 @@ def message_is_command(message):
             "delete", "cut",
             "show", "see",
             "edit", "change",
-            "cancel"
+            "cancel",
+            "example"
             ]
     commands = list(map(lambda word: "/" + word, commands))
 
