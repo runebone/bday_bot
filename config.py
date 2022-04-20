@@ -32,6 +32,7 @@ class BotText:
     DATE_INPUT_OFFER = "Введите новую дату:"
     NICKNAME_INPUT_OFFER = "Введите новый ник через *@*:"
     PHONE_INPUT_OFFER = "Введите новый номер телефона:"
+    INPUT_AGAIN_OFFER = ADD
 
     ADD_SUCCESS = "Запись успешно добавлена."
     DELETE_SUCCESS = "Запись успешно удалена."
