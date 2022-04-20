@@ -25,10 +25,7 @@ def process_edit_delete_step(message, bot, db):
         bot.send_message(message.chat.id, FailText.NewUserHasNoRecords, \
                 reply_markup=gen_add_friend_markup())
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
 
 def process_confirm_deletion_step(message, bot, db):
     try:
@@ -37,10 +34,7 @@ def process_confirm_deletion_step(message, bot, db):
                 reply_markup=gen_confirm_deletion_markup(),
                 parse_mode="Markdown")
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
 
 # TODO: text = BotText... everywhere
 def process_edit_record_step(message, bot, db):
@@ -53,65 +47,73 @@ def process_edit_record_step(message, bot, db):
                 parse_mode="Markdown")
 
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
 
 # Process editing fields
 
+# XXX
 def process_edit_name_step(message, bot, db):
     try:
-        pass
+        text = BotText.NAME_INPUT_OFFER
+        bot.send_message(message.chat.id, text, \
+                reply_markup=gen_cancel_markup(),
+                parse_mode="Markdown")
+
+        record = get_record_from_output_message_text_and_db(message.text, db)
+        index = db.get_record_index_by_record(message.chat.id, record)
+
+        bot.register_next_step_handler(message, process_input_name_step, bot, db, record, index)
 
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
+        uncaught_error(message, bot, e)
 
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+def process_input_name_step(message, bot, db, record, index):
+    try:
+        # TODO: assert message is not too large
+        # TODO: assert message has name
+
+        name = message.text
+        record["name"] = name
+
+        process_update_name_step(message, bot, db, record, index)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+def process_update_name_step(message, bot, db, record, index):
+    try:
+        db.update_record_by_index(message.chat.id, record, index)
+        text = BotText.EDIT_SUCCESS
+        bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        process_edit_delete_step(message, bot, db)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
 
 def process_edit_date_step(message, bot, db):
     try:
         pass
 
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
 
 def process_edit_nickname_step(message, bot, db):
     try:
         pass
 
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
 
 def process_edit_phone_step(message, bot, db):
     try:
         pass
 
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
 
 def process_input_again_step(message, bot, db):
     try:
         pass
 
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
