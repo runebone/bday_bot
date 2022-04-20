@@ -159,6 +159,10 @@ def normalize_phone(phone_string):
     phone_normal = "".join(phone_normal.split("("))
     phone_normal = "".join(phone_normal.split(")"))
 
+    # If phone number does not contain country code - use Russia by default
+    if (phone_normal[:-10] == ""):
+        phone_normal = "8" + phone_normal
+
     return phone_normal
 
 def beautify_phone(phone_normal_string):
@@ -178,10 +182,6 @@ def beautify_phone(phone_normal_string):
     # "(123)456-78-90"
     phone_beautiful = phone_normal_string[:-10] + phone_beautiful
     # "ABC(123)456-78-90"
-
-    # If phone number does not contain country code - use Russia by default
-    if (phone_normal_string[:-10] == ""):
-        phone_beautiful = "8" + phone_beautiful
 
     # Substitute 8 by 7 in Russian phone numbers
     if (phone_beautiful[:2] == "8("):
