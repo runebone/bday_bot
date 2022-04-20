@@ -69,9 +69,7 @@ def callback_query(call):
             add(call.message)
         elif call.data == "cb_show_command":
             show(call.message)
-        elif call.data == "cb_edit_command":
-            edit(call.message)
-        elif call.data == "cb_delete_command":
+        elif call.data == "cb_edit_delete_command":
             edit_delete(call.message)
         elif call.data == "cb_example_command":
             example(call.message)
@@ -79,25 +77,30 @@ def callback_query(call):
         elif call.data == "cb_delete_record":
             db = get_database()
             bc.edit_delete.process_confirm_deletion_step(call.message, bot, db)
+
+        elif call.data == "cb_edit_record":
+            db = get_database()
+            bc.edit_delete.process_edit_record_step(call.message, bot, db)
+        elif call.data == "cb_edit_name":
+            db = get_database()
+            bc.edit_delete.process_edit_name_step(call.message, bot, db)
+        elif call.data == "cb_edit_date":
+            db = get_database()
+            bc.edit_delete.process_edit_date_step(call.message, bot, db)
+        elif call.data == "cb_edit_nickname":
+            db = get_database()
+            bc.edit_delete.process_edit_phone_step(call.message, bot, db)
+        elif call.data == "cb_edit_phone":
+            db = get_database()
+            bc.edit_delete.process_edit_record_step(call.message, bot, db)
+        elif call.data == "cb_input_again":
+            db = get_database()
+            bc.edit_delete.process_input_again_step(call.message, bot, db)
+
         elif call.data == "cb_confirm_deletion":
             db = get_database()
 
-            name = get_name_from_output_message_text(call.message.text)
-
-            date = get_date_from_message(call.message.text)
-            date = normal_date_to_usa_format(date)
-
-            nickname = get_nickname_from_message(call.message.text)
-            if (nickname != None): nickname = nickname[1:]
-
-            phone = get_phone_from_message(call.message.text)
-            if (phone != None): phone = normalize_phone(phone)
-
-            record = dict(db.sample_record)
-            record["name"] = name
-            record["date"] = date
-            record["nickname"] = nickname
-            record["phone"] = phone
+            record = get_record_from_output_message_text(call.message.text)
 
             db.delete_record_by_record(call.message.chat.id, record)
             bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
@@ -116,6 +119,28 @@ def callback_query(call):
 
         tb = sys.exc_info()[2]
         raise e.with_traceback(tb)
+
+def get_record_from_output_message_text(message_text):
+    db = get_database()
+
+    name = get_name_from_output_message_text(message_text)
+
+    date = get_date_from_message(message_text)
+    date = normal_date_to_usa_format(date)
+
+    nickname = get_nickname_from_message(message_text)
+    if (nickname != None): nickname = nickname[1:]
+
+    phone = get_phone_from_message(call.message.text)
+    if (phone != None): phone = normalize_phone(phone)
+
+    record = dict(db.sample_record)
+    record["name"] = name
+    record["date"] = date
+    record["nickname"] = nickname
+    record["phone"] = phone
+
+    return record
 
 def get_name_from_output_message_text(message_text):
     pattern = "(?:Имя: )([^\n]*)"
