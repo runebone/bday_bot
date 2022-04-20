@@ -79,14 +79,32 @@ phone_formats = \
 +7({:03d}){:03d}-{:02d}-{:02d}""".split("\n")
 
 def get_example():
+    example = [get_random_name()]
+
+    if (chance(90)):
+        example.append(get_random_definition())
+
+    example.append(get_random_date())
+
+    if (chance(70)):
+        example.append(get_random_nickname())
+
+    if (chance(50)):
+        example.append(get_random_phone())
+
+    example = " ".join(example)
+
+    return example
+
+def get_random_name():
     name = np.random.choice(names)
+    return name
 
-    example = [name]
+def get_random_definition():
+    definition = np.random.choice(definitions)
+    return definition
 
-    if (np.random.randint(100) > 10):
-        definition = np.random.choice(definitions)
-        example.append(definition)
-
+def get_random_date():
     date_fmt = np.random.choice(date_formats)
 
     day = 1 + np.random.randint(31)
@@ -102,26 +120,29 @@ def get_example():
 
     date = date_fmt.format(day, month, year)
 
-    example.append(date)
+    return date
 
-    if (np.random.randint(100) > 50):
-        nick_adj = np.random.choice(nick_adjectives)
-        nick_noun = np.random.choice(nick_nouns)
-        nickname = "@{}_{}".format(nick_adj, nick_noun)
-        example.append(nickname)
+def get_random_nickname():
+    nick_adj = np.random.choice(nick_adjectives)
+    nick_noun = np.random.choice(nick_nouns)
+    nickname = "@{}_{}".format(nick_adj, nick_noun)
 
-    if (np.random.randint(100) > 70):
-        phone_fmt = np.random.choice(phone_formats)
-        phone = phone_fmt.format(np.random.randint(1000), \
-                np.random.randint(1000), \
-                np.random.randint(100), \
-                np.random.randint(100))
+    return nickname
 
-        example.append(phone)
+def get_random_phone():
+    phone_fmt = np.random.choice(phone_formats)
+    phone = phone_fmt.format(np.random.randint(1000), \
+            np.random.randint(1000), \
+            np.random.randint(100), \
+            np.random.randint(100))
 
-    example = " ".join(example)
+    return phone
 
-    return example
+def chance(number):
+    number /= 100
+    if (np.random.rand() < number):
+        return True
+    return False
 
 if __name__ == "__main__":
     print(get_example())
