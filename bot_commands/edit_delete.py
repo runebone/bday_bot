@@ -17,13 +17,10 @@ def process_edit_delete_step(message, bot, db):
         bot.send_message(message.chat.id, BotText.CHANGED_MIND, \
                 reply_markup=gen_cancel_markup())
 
-    # FIXME: DRY
     except UserHasNoRecords:
-        bot.send_message(message.chat.id, FailText.UserHasNoRecords, \
-                reply_markup=gen_add_friend_markup())
+        UserHasNoRecords.default(message, bot, db, record, index)
     except NewUserHasNoRecords:
-        bot.send_message(message.chat.id, FailText.NewUserHasNoRecords, \
-                reply_markup=gen_add_friend_markup())
+        UserHasNoRecords.default(message, bot, db, record, index)
     except Exception as e:
         uncaught_error(message, bot, e)
 
@@ -50,7 +47,7 @@ def process_edit_record_step(message, bot, db):
         uncaught_error(message, bot, e)
 
 # ==================================================
-# Process editing fields
+# Process editing fields # FIXME: this is shit code.
 # ==================================================
 
 def process_edit_name_step(message, bot, db):
@@ -70,14 +67,18 @@ def process_edit_name_step(message, bot, db):
 
 def process_input_name_step(message, bot, db, record, index):
     try:
-        # TODO: assert message is not too large
-        # TODO: assert message has name
+        assert_message_is_not_command(message)
+        assert_message_has_valid_length(message)
 
         name = message.text
         record["name"] = name
 
         process_update_name_step(message, bot, db, record, index)
 
+    except MessageIsCommand:
+        MessageIsCommand.input_name(message, default, bot, db)
+    except MessageTooLarge:
+        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
     except Exception as e:
         uncaught_error(message, bot, e)
 
@@ -110,7 +111,9 @@ def process_edit_date_step(message, bot, db):
 
 def process_input_date_step(message, bot, db, record, index):
     try:
-        # TODO: asserts
+        assert_message_is_not_command(message)
+        assert_message_has_valid_length(message)
+        assert_message_has_date(message)
 
         date = get_date_from_message(message.text)
         date = normalize_date(date)
@@ -119,6 +122,12 @@ def process_input_date_step(message, bot, db, record, index):
 
         process_update_date_step(message, bot, db, record, index)
 
+    except MessageIsCommand:
+        MessageIsCommand.input_date(message, default, bot, db)
+    except MessageTooLarge:
+        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
+    except NoDate:
+        NoDate.default(message, process_input_date_step, bot, db, record, index)
     except Exception as e:
         uncaught_error(message, bot, e)
 
@@ -151,13 +160,21 @@ def process_edit_nickname_step(message, bot, db):
 
 def process_input_nickname_step(message, bot, db, record, index):
     try:
-        # TODO: asserts
+        assert_message_is_not_command(message)
+        assert_message_has_valid_length(message)
+        assert_message_has_nickname(message)
 
         nickname = get_nickname_from_message(message.text)
         record["nickname"] = nickname[1:] # TODO: regex extract without @; fix main logic
 
         process_update_nickname_step(message, bot, db, record, index)
 
+    except MessageIsCommand:
+        MessageIsCommand.input_nickname(message, default, bot, db)
+    except MessageTooLarge:
+        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
+    except NoNickname:
+        NoNickname.default(message, process_input_nickname_step, bot, db, record, index)
     except Exception as e:
         uncaught_error(message, bot, e)
 
@@ -190,7 +207,9 @@ def process_edit_phone_step(message, bot, db):
 
 def process_input_phone_step(message, bot, db, record, index):
     try:
-        # TODO: asserts
+        assert_message_is_not_command(message)
+        assert_message_has_valid_length(message)
+        assert_message_has_phone(message)
 
         phone = get_phone_from_message(message.text)
         phone = normalize_phone(phone)
@@ -198,6 +217,12 @@ def process_input_phone_step(message, bot, db, record, index):
 
         process_update_phone_step(message, bot, db, record, index)
 
+    except MessageIsCommand:
+        MessageIsCommand.input_phone(message, default, bot, db)
+    except MessageTooLarge:
+        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
+    except NoPhone:
+        NoPhone.default(message, process_input_phone_step, bot, db, record, index)
     except Exception as e:
         uncaught_error(message, bot, e)
 
@@ -240,6 +265,14 @@ def process_input_again_input_step(message, bot, db, record, index):
 
         process_update_record_step(message, bot, db, record, index)
 
+    except MessageIsCommand:
+        pass
+    except MessageTooLarge:
+        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
+    except NoNameInTheBeginning:
+        NoNameInTheBeginning.default(message, process_input_again_input_step, bot, db, record, index)
+    except NoDate:
+        NoDate.default(message, process_input_again_input_step, bot, db, record, index)
     except Exception as e:
         uncaught_error(message, bot, e)
 
