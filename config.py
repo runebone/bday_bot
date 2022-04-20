@@ -1,4 +1,5 @@
 # from enum import Enum
+from dev_data import DEVELOPER_CHAT_ID
 
 class Config:
     class Database:
