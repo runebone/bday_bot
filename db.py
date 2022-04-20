@@ -86,7 +86,7 @@ class Database:
         if (user_records == []):
             raise UserHasNoRecords
         else:
-            if (record not in database[self.users][0][chat_id]):
+            if (record not in user_records):
                 raise RecordNotFound
             else:
                 database[self.users][0][chat_id].remove(record)
