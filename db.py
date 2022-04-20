@@ -92,7 +92,7 @@ class Database:
                 database[self.users][0][chat_id].remove(record)
                 self.dump(database)
 
-    def update_record_by_index(self, chat_id, index, new_record):
+    def update_record_by_index(self, chat_id, new_record, index):
         chat_id = str(chat_id)
         database = self.load()
         users = self.get_users_list_from_dict(database)
