@@ -42,13 +42,15 @@ def process_confirm_deletion_step(message, bot, db):
         tb = sys.exc_info()[2]
         raise e.with_traceback(tb)
 
+# TODO: text = BotText... everywhere
 def process_edit_record_step(message, bot, db):
     try:
-        bot.send_message(message.chat.id, \
-                BotText.YOU_HAVE_CHOSEN_TO_EDIT.format(message.text), \
+        text = BotText.YOU_HAVE_CHOSEN_TO_EDIT.format(message.text)
+        text += "\n\n"
+        text += BotText.CHOOSE_FIELD_TO_EDIT
+        bot.send_message(message.chat.id, text, \
+                reply_markup=gen_edit_record_markup(),
                 parse_mode="Markdown")
-        bot.send_message(message.chat.id, BotText.CHOOSE_FIELD_TO_EDIT, \
-                reply_markup=gen_edit_record_markup())
 
     except Exception as e:
         bot.send_message(message.chat.id, \
@@ -133,6 +135,3 @@ def process_input_again_step(message, bot, db):
 
         tb = sys.exc_info()[2]
         raise e.with_traceback(tb)
-
-class LastChosenRecord:
-    text = ""
