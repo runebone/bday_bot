@@ -8,6 +8,15 @@ def default(message, bot):
     bot.send_message(message.chat.id, BotText.CHOOSE_ACTION,\
             reply_markup=gen_default_actions_markup())
 
+def uncaught_error(message, bot, exception):
+    bot.send_message(message.chat.id, \
+            FailText.UncaughtError.format(str(exception)))
+    raise_traceback(exception)
+
+def raise_traceback(exception):
+    tb = sys.exc_info()[2]
+    raise exception.with_traceback(tb)
+
 def message_is_command(message):
     commands = [
             "start", "help",
@@ -48,7 +57,7 @@ def assert_user_has_records(message, db):
     if (len(records) == 0):
         raise UserHasNoRecords
 
-def get_record_from_output_message_text(message_text, db):
+def get_record_from_output_message_text_and_db(message_text, db):
     name = get_name_from_output_message_text(message_text)
 
     date = get_date_from_message(message_text)
