@@ -22,8 +22,4 @@ def process_show_step(message, bot, db):
         bot.send_message(message.chat.id, FailText.NewUserHasNoRecords, \
                 reply_markup=gen_add_friend_markup())
     except Exception as e:
-        bot.send_message(message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(message, bot, e)
