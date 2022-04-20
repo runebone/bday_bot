@@ -96,3 +96,15 @@ def gen_cancel_markup():
     markup.add(cancel)
 
     return markup
+
+def gen_edit_back_markup():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 1
+
+    IKB = InlineKeyboardButton
+
+    cancel = IKB("Назад", callback_data="cb_edit_back")
+
+    markup.add(cancel)
+
+    return markup
