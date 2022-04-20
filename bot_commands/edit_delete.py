@@ -215,7 +215,40 @@ def process_update_phone_step(message, bot, db, record, index):
 
 def process_input_again_step(message, bot, db):
     try:
-        pass
+        text = BotText.INPUT_AGAIN_OFFER
+        bot.send_message(message.chat.id, text, \
+                reply_markup=gen_cancel_markup(),
+                parse_mode="Markdown")
+
+        record = get_record_from_output_message_text_and_db(message.text, db)
+        index = db.get_record_index_by_record(message.chat.id, record)
+
+        bot.register_next_step_handler(message, process_input_again_input_step, bot, db, record, index)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+# FIXME: rename these functions
+def process_input_again_input_step(message, bot, db, record, index):
+    try:
+        assert_message_is_not_command(message)
+        assert_message_has_valid_length(message)
+        assert_message_has_name_in_the_beginning(message)
+        assert_message_has_date(message)
+
+        record = get_record_from_message_and_db(message, db)
+
+        process_update_record_step(message, bot, db, record, index)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+def process_update_record_step(message, bot, db, record, index):
+    try:
+        db.update_record_by_index(message.chat.id, record, index)
+        text = BotText.EDIT_SUCCESS
+        bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        process_edit_delete_step(message, bot, db)
 
     except Exception as e:
         uncaught_error(message, bot, e)
