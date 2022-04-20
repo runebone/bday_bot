@@ -89,10 +89,10 @@ def callback_query(call):
             bc.edit_delete.process_edit_date_step(call.message, bot, db)
         elif call.data == "cb_edit_nickname":
             db = get_database()
-            bc.edit_delete.process_edit_phone_step(call.message, bot, db)
+            bc.edit_delete.process_edit_nickname_step(call.message, bot, db)
         elif call.data == "cb_edit_phone":
             db = get_database()
-            bc.edit_delete.process_edit_record_step(call.message, bot, db)
+            bc.edit_delete.process_edit_phone_step(call.message, bot, db)
         elif call.data == "cb_input_again":
             db = get_database()
             bc.edit_delete.process_input_again_step(call.message, bot, db)
