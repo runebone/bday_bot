@@ -111,7 +111,7 @@ def get_random_date():
     month = 1 + np.random.randint(12)
     year = 1 + np.random.randint(99)
 
-    if (np.random.randint(2)):
+    if (chance(50)):
         current_year = str(datetime.today().year)[2:]
         if (int(current_year) > year):
             year += 2000
