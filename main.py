@@ -100,7 +100,7 @@ def callback_query(call):
         elif call.data == "cb_confirm_deletion":
             db = get_database()
 
-            record = get_record_from_output_message_text(call.message.text)
+            record = get_record_from_output_message_text(call.message.text, db)
 
             db.delete_record_by_record(call.message.chat.id, record)
             bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
@@ -119,33 +119,6 @@ def callback_query(call):
 
         tb = sys.exc_info()[2]
         raise e.with_traceback(tb)
-
-def get_record_from_output_message_text(message_text):
-    db = get_database()
-
-    name = get_name_from_output_message_text(message_text)
-
-    date = get_date_from_message(message_text)
-    date = normal_date_to_usa_format(date)
-
-    nickname = get_nickname_from_message(message_text)
-    if (nickname != None): nickname = nickname[1:]
-
-    phone = get_phone_from_message(message_text)
-    if (phone != None): phone = normalize_phone(phone)
-
-    record = dict(db.sample_record)
-    record["name"] = name
-    record["date"] = date
-    record["nickname"] = nickname
-    record["phone"] = phone
-
-    return record
-
-def get_name_from_output_message_text(message_text):
-    pattern = "(?:Имя: )([^\n]*)"
-    name = re.findall(pattern, message_text)[0]
-    return name
 
 # ===============================================
 
