@@ -25,10 +25,6 @@ class Database:
         with open(self.file, "w") as f:
             json.dump(updated_database_dict, f, indent=4)
 
-    def assert_valid_record_fields(self, record_dict):
-        if (list(record_dict.keys()) != self.record_fields):
-            raise InvalidRecordFields
-
     def get_users_list_from_dict(self, database_dict):
         users_list = list(database_dict[self.users][0].keys())
         return users_list
@@ -43,8 +39,6 @@ class Database:
         database_dict[self.users][0][chat_id_str] = []
 
     def add_new_record(self, chat_id, record_dict):
-        self.assert_valid_record_fields(record_dict)
-
         chat_id = str(chat_id)
         database = self.load()
         users = self.get_users_list_from_dict(database)

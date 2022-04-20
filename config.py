@@ -9,7 +9,6 @@ class Config:
             "date": None,
             "nickname": None,
             "phone": None,
-            "note": None
         }
         record_fields = list(sample_record.keys())
         users = "user_data"
@@ -52,7 +51,6 @@ class FailText:
             "поздравляемого и содержать дату."
     NoDate = "Сообщение должно содержать дату."
     InvalidNickname = "Ник должен быть не короче 5 и не длиннее 32 символов."
-    InvalidRecordFields = "InvalidRecordFields."
     UserHasNoRecords = "У вас нет записей. " \
     "Чтобы добавить запись, напишите /add, или нажмите на кнопку."
     NewUserHasNoRecords = "У вас нет записей. " \
@@ -77,7 +75,6 @@ class MessageTooLarge(Error): pass
 class NoNameInTheBeginning(Error): pass
 class NoDate(Error): pass
 class InvalidNickname(Error): pass
-class InvalidRecordFields(Error): pass
 class UserHasNoRecords(Error): pass
 class NewUserHasNoRecords(Error): pass
 class RecordIndexOutOfRange(Error): pass
