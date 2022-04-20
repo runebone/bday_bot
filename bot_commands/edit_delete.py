@@ -49,9 +49,10 @@ def process_edit_record_step(message, bot, db):
     except Exception as e:
         uncaught_error(message, bot, e)
 
+# ==================================================
 # Process editing fields
+# ==================================================
 
-# XXX
 def process_edit_name_step(message, bot, db):
     try:
         text = BotText.NAME_INPUT_OFFER
@@ -90,26 +91,127 @@ def process_update_name_step(message, bot, db, record, index):
     except Exception as e:
         uncaught_error(message, bot, e)
 
+# ==================================================
+
 def process_edit_date_step(message, bot, db):
     try:
-        pass
+        text = BotText.DATE_INPUT_OFFER
+        bot.send_message(message.chat.id, text, \
+                reply_markup=gen_cancel_markup(),
+                parse_mode="Markdown")
+
+        record = get_record_from_output_message_text_and_db(message.text, db)
+        index = db.get_record_index_by_record(message.chat.id, record)
+
+        bot.register_next_step_handler(message, process_input_date_step, bot, db, record, index)
 
     except Exception as e:
         uncaught_error(message, bot, e)
+
+def process_input_date_step(message, bot, db, record, index):
+    try:
+        # TODO: asserts
+
+        date = get_date_from_message(message.text)
+        date = normalize_date(date)
+        date = normal_date_to_usa_format(date)
+        record["date"] = date
+
+        process_update_date_step(message, bot, db, record, index)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+def process_update_date_step(message, bot, db, record, index):
+    try:
+        db.update_record_by_index(message.chat.id, record, index)
+        text = BotText.EDIT_SUCCESS
+        bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        process_edit_delete_step(message, bot, db)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+# ==================================================
 
 def process_edit_nickname_step(message, bot, db):
     try:
-        pass
+        text = BotText.NICKNAME_INPUT_OFFER
+        bot.send_message(message.chat.id, text, \
+                reply_markup=gen_cancel_markup(),
+                parse_mode="Markdown")
+
+        record = get_record_from_output_message_text_and_db(message.text, db)
+        index = db.get_record_index_by_record(message.chat.id, record)
+
+        bot.register_next_step_handler(message, process_input_nickname_step, bot, db, record, index)
 
     except Exception as e:
         uncaught_error(message, bot, e)
+
+def process_input_nickname_step(message, bot, db, record, index):
+    try:
+        # TODO: asserts
+
+        nickname = get_nickname_from_message(message.text)
+        record["nickname"] = nickname[1:] # TODO: regex extract without @; fix main logic
+
+        process_update_nickname_step(message, bot, db, record, index)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+def process_update_nickname_step(message, bot, db, record, index):
+    try:
+        db.update_record_by_index(message.chat.id, record, index)
+        text = BotText.EDIT_SUCCESS
+        bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        process_edit_delete_step(message, bot, db)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+# ==================================================
 
 def process_edit_phone_step(message, bot, db):
     try:
-        pass
+        text = BotText.PHONE_INPUT_OFFER
+        bot.send_message(message.chat.id, text, \
+                reply_markup=gen_cancel_markup(),
+                parse_mode="Markdown")
+
+        record = get_record_from_output_message_text_and_db(message.text, db)
+        index = db.get_record_index_by_record(message.chat.id, record)
+
+        bot.register_next_step_handler(message, process_input_phone_step, bot, db, record, index)
 
     except Exception as e:
         uncaught_error(message, bot, e)
+
+def process_input_phone_step(message, bot, db, record, index):
+    try:
+        # TODO: asserts
+
+        phone = get_phone_from_message(message.text)
+        phone = normalize_phone(phone)
+        record["phone"] = phone
+
+        process_update_phone_step(message, bot, db, record, index)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+def process_update_phone_step(message, bot, db, record, index):
+    try:
+        db.update_record_by_index(message.chat.id, record, index)
+        text = BotText.EDIT_SUCCESS
+        bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        process_edit_delete_step(message, bot, db)
+
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+# ==================================================
 
 def process_input_again_step(message, bot, db):
     try:
