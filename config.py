@@ -27,6 +27,11 @@ class BotText:
     YOU_HAVE_CHOSEN_TO_DELETE = "*Вы выбрали:*\n\n{}"
     YOU_HAVE_CHOSEN_TO_EDIT = "*Вы выбрали:*\n\n{}"
 
+    NAME_INPUT_OFFER = "Введите новое имя:"
+    DATE_INPUT_OFFER = "Введите новую дату:"
+    NICKNAME_INPUT_OFFER = "Введите новый ник через *@*:"
+    PHONE_INPUT_OFFER = "Введите новый номер телефона:"
+
     ADD_SUCCESS = "Запись успешно добавлена."
     DELETE_SUCCESS = "Запись успешно удалена."
     EDIT_SUCCESS = "Запись успешно изменена."
