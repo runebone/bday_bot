@@ -9,18 +9,22 @@ from config import *
 from my_regex import *
 from example import get_example
 
+# Get API token
+with open(".API_TOKEN") as f:
+    API_TOKEN = f.readline()[:-1]
+
 # Initialize database; global constant
 db = Database(Config.Database.file)
+
+# Initialize bot; global constant
+bot = telebot.TeleBot(API_TOKEN)
 
 # For callback functions
 def get_database():
     return db
 
-# Get API token
-with open(".API_TOKEN") as f:
-    API_TOKEN = f.readline()[:-1]
-
-bot = telebot.TeleBot(API_TOKEN)
+def get_bot():
+    return bot
 
 # ===============================================
 
