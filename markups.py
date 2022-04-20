@@ -24,10 +24,10 @@ def gen_edit_record_markup():
     date = IKB("Дата", callback_data="cb_edit_date")
     nickname = IKB("Никнейм", callback_data="cb_edit_nickname")
     phone = IKB("Телефон", callback_data="cb_edit_phone")
-    cancel = IKB("Отмена", callback_data="cb_edit_delete_command")
+    back = IKB("Назад", callback_data="cb_edit_delete_command")
     input_again = IKB("Ввести заново", callback_data="cb_input_again")
 
-    markup.add(name, date, nickname, phone, cancel, input_again)
+    markup.add(name, date, nickname, phone, back, input_again)
 
     return markup
 
