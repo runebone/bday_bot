@@ -72,6 +72,7 @@ def get_record_from_output_message_text_and_db(message_text, db):
     nickname = get_nickname_from_output_message_text(message_text)
 
     phone = get_phone_from_output_message_text(message_text)
+    if (phone): phone = normalize_phone(phone) #TODO: normalize <- accept None
 
     record = dict(db.sample_record)
     record["name"] = name
