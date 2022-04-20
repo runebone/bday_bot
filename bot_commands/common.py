@@ -2,13 +2,19 @@ from my_regex import *
 from config import *
 from markups import *
 import sys
+import traceback
 
 # FIXME: copied from main.py to use in add; idk yet how to fix it
 def default(message, bot):
     bot.send_message(message.chat.id, BotText.CHOOSE_ACTION,\
             reply_markup=gen_default_actions_markup())
 
+def send_debug_info_to_dev(message, bot):
+    dbg = "*Uncaught error from:* {} (@{})\n\n*Message:* {}\n\n{}".format(message.chat.id, message.chat.username, message.text, traceback.format_exc())
+    bot.send_message(DEVELOPER_CHAT_ID, dbg, parse_mode="Markdown")
+
 def uncaught_error(message, bot, exception):
+    send_debug_info_to_dev(message, bot)
     bot.send_message(message.chat.id, \
             FailText.UncaughtError.format(str(exception)))
     raise_traceback(exception)
