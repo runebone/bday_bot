@@ -1,5 +1,4 @@
 from config import *
-import pandas as pd
 import json
 
 class Database:
@@ -74,32 +73,6 @@ class Database:
 
         return user_records
 
-    def delete_record_by_index(self, chat_id, record_index):
-        chat_id = str(chat_id)
-        database = self.load()
-        users = self.get_users_list_from_dict(database)
-
-        if (chat_id not in users):
-            raise NewUserHasNoRecords
-        else:
-            user_records = self.get_user_records_from_dict(database, chat_id)
-
-        if (user_records == []):
-            raise UserHasNoRecords
-        elif (len(user_records) <= record_index):
-            raise RecordIndexOutOfRange
-        else:
-            # df - user records dataframe
-            df = pd.DataFrame(self.get_user_records_from_dict(database, \
-                                                                chat_id))
-            df = df.sort_values(by="date").reset_index(drop=True)
-            df = df.drop(labels=record_index, axis=0) # Delete record
-            df = df.to_dict(orient="records")
-
-            database[self.users][0][chat_id] = df
-
-            self.dump(database)
-
     def delete_record_by_record(self, chat_id, record):
         chat_id = str(chat_id)
         database = self.load()
@@ -139,30 +112,6 @@ class Database:
                 index = database[self.users][0][chat_id].index(record)
 
         return index
-
-    def get_record_by_index(self, chat_id, record_index):
-        chat_id = str(chat_id)
-        database = self.load()
-        users = self.get_users_list_from_dict(database)
-
-        if (chat_id not in users):
-            raise NewUserHasNoRecords
-        else:
-            user_records = self.get_user_records_from_dict(database, chat_id)
-
-        if (user_records == []):
-            raise UserHasNoRecords
-        elif (len(user_records) <= record_index):
-            raise RecordIndexOutOfRange
-        else:
-            # df - user records dataframe
-            df = pd.DataFrame(self.get_user_records_from_dict(database, \
-                                                                chat_id))
-            df = df.sort_values(by="date").reset_index(drop=True)
-            df = df.loc[[record_index]] # Get record
-            df = df.to_dict(orient="records")
-
-            return df
 
 if __name__ == "__main__":
     pass
