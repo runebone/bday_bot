@@ -66,14 +66,12 @@ def assert_user_has_records(message, db):
 def get_record_from_output_message_text_and_db(message_text, db):
     name = get_name_from_output_message_text(message_text)
 
-    date = get_date_from_message(message_text)
+    date = get_date_from_output_message_text(message_text)
     date = normal_date_to_usa_format(date)
 
-    nickname = get_nickname_from_message(message_text)
-    if (nickname != None): nickname = nickname[1:]
+    nickname = get_nickname_from_output_message_text(message_text)
 
-    phone = get_phone_from_message(message_text)
-    if (phone != None): phone = normalize_phone(phone)
+    phone = get_phone_from_output_message_text(message_text)
 
     record = dict(db.sample_record)
     record["name"] = name
@@ -84,6 +82,33 @@ def get_record_from_output_message_text_and_db(message_text, db):
     return record
 
 def get_name_from_output_message_text(message_text):
-    pattern = "(?:Имя: )([^\n]*)"
-    name = re.findall(pattern, message_text)[0]
+    name_header = BotText.output["name"].split("{}")[0]
+    pattern = f"(?:{name_header})([^\n]*)"
+    name = re.findall(pattern, message_text)
+    if (name): name = name[0]
+    else: name = None
     return name
+
+def get_date_from_output_message_text(message_text):
+    date_header = BotText.output["date"].split("{}")[0]
+    pattern = f"(?:{date_header})([^\n]*)"
+    date = re.findall(pattern, message_text)
+    if (date): date = date[0]
+    else: date = None
+    return date
+
+def get_nickname_from_output_message_text(message_text):
+    nickname_header = BotText.output["nickname"].split("{}")[0]
+    pattern = f"(?:{nickname_header})([^\n]*)"
+    nickname = re.findall(pattern, message_text)
+    if (nickname): nickname = nickname[0]
+    else: nickname = None
+    return nickname
+
+def get_phone_from_output_message_text(message_text):
+    phone_header = BotText.output["phone"].split("{}")[0]
+    pattern = f"(?:{phone_header})([^\n]*)"
+    phone = re.findall(pattern, message_text)
+    if (phone): phone = phone[0]
+    else: phone = None
+    return phone
