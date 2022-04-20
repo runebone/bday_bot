@@ -182,3 +182,15 @@ def message_has_phone(message):
 
 def remove_parsed_data_from_message(message_string, data):
     return re.sub(r"{data}", "", message_string, count=1)
+
+# =================================================
+
+def assert_message_has_nickname(message):
+    nickname = get_nickname_from_message(message.text)
+    if (nickname == None):
+        raise NoNickname
+
+def assert_message_has_phone(message):
+    phone = get_phone_from_message(message.text)
+    if (phone == None):
+        raise NoPhone
