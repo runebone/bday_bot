@@ -70,6 +70,8 @@ class Const:
 
 # ==================================================
 
+# FIXME: DRY!!!!!
+
 class Error(Exception): pass
 """Base class for custom exceptions."""
 class MessageIsCommand(Error):
@@ -78,68 +80,88 @@ class MessageIsCommand(Error):
         bot.send_message(message.chat.id, text.format(message.text))
         process_function(message, bot)
 
+    def input_name(message, process_function, bot, db):
+        text = "Вы вышли из режима изменения имени. Введите команду {} повторно, чтобы исполнить её."
+        bot.send_message(message.chat.id, text.format(message.text))
+        process_function(message, bot)
+
+    def input_date(message, process_function, bot, db):
+        text = "Вы вышли из режима изменения даты. Введите команду {} повторно, чтобы исполнить её."
+        bot.send_message(message.chat.id, text.format(message.text))
+        process_function(message, bot)
+
+    def input_nickname(message, process_function, bot, db):
+        text = "Вы вышли из режима изменения ника. Введите команду {} повторно, чтобы исполнить её."
+        bot.send_message(message.chat.id, text.format(message.text))
+        process_function(message, bot)
+
+    def input_phone(message, process_function, bot, db):
+        text = "Вы вышли из режима изменения номера телефона. Введите команду {} повторно, чтобы исполнить её."
+        bot.send_message(message.chat.id, text.format(message.text))
+        process_function(message, bot)
+
 class MessageTooLarge(Error):
     text = FailText.MessageTooLarge
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, MessageTooLarge.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class NoNameInTheBeginning(Error):
     text = FailText.NoNameInTheBeginning
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, NoNameInTheBeginning.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class NoDate(Error):
     text = FailText.NoDate
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, NoDate.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class NoNickname(Error):
     text = FailText.NoNickname
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, NoNickname.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class NoPhone(Error):
     text = FailText.NoPhone
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, NoPhone.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class InvalidNickname(Error):
     text = FailText.InvalidNickname
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, InvalidNickname.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class UserHasNoRecords(Error):
     text = FailText.UserHasNoRecords
-    def default(message, process_function, bot, db):
-        bot.send_message(message.chat.id, UserHasNoRecords.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+    def default(message, bot, db):
+        bot.send_message(message.chat.id, UserHasNoRecords.text, reply_markup=gen_add_friend_markup())
+        #bot.register_next_step_handler(message, process_function, bot, db)
 
 class NewUserHasNoRecords(Error):
     text = FailText.NewUserHasNoRecords
-    def default(message, process_function, bot, db):
-        bot.send_message(message.chat.id, NewUserHasNoRecords.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+    def default(message, bot, db):
+        bot.send_message(message.chat.id, NewUserHasNoRecords.text, reply_markup=gen_add_friend_markup())
+        #bot.register_next_step_handler(message, process_function, bot, db)
 
 class RecordIndexOutOfRange(Error):
     text = FailText.RecordIndexOutOfRange
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, RecordIndexOutOfRange.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class RecordAlreadyExists(Error):
     text = FailText.RecordAlreadyExists
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, RecordAlreadyExists.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
 
 class RecordNotFound(Error):
     text = FailText.RecordNotFound
-    def default(message, process_function, bot, db):
+    def default(message, process_function, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, RecordNotFound.text)
-        bot.register_next_step_handler(message, process_function, bot, db)
+        bot.register_next_step_handler(message, process_function, bot, db, *args, **kwargs)
