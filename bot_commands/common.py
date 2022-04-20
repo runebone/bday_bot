@@ -47,3 +47,28 @@ def assert_user_has_records(message, db):
     records = db.get_user_records(message.chat.id)
     if (len(records) == 0):
         raise UserHasNoRecords
+
+def get_record_from_output_message_text(message_text, db):
+    name = get_name_from_output_message_text(message_text)
+
+    date = get_date_from_message(message_text)
+    date = normal_date_to_usa_format(date)
+
+    nickname = get_nickname_from_message(message_text)
+    if (nickname != None): nickname = nickname[1:]
+
+    phone = get_phone_from_message(message_text)
+    if (phone != None): phone = normalize_phone(phone)
+
+    record = dict(db.sample_record)
+    record["name"] = name
+    record["date"] = date
+    record["nickname"] = nickname
+    record["phone"] = phone
+
+    return record
+
+def get_name_from_output_message_text(message_text):
+    pattern = "(?:Имя: )([^\n]*)"
+    name = re.findall(pattern, message_text)[0]
+    return name
