@@ -131,7 +131,7 @@ def get_record_from_output_message_text(message_text):
     nickname = get_nickname_from_message(message_text)
     if (nickname != None): nickname = nickname[1:]
 
-    phone = get_phone_from_message(call.message.text)
+    phone = get_phone_from_message(message_text)
     if (phone != None): phone = normalize_phone(phone)
 
     record = dict(db.sample_record)
