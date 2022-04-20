@@ -24,7 +24,7 @@ def gen_edit_record_markup():
     date = IKB("Дата", callback_data="cb_edit_date")
     nickname = IKB("Никнейм", callback_data="cb_edit_nickname")
     phone = IKB("Телефон", callback_data="cb_edit_phone")
-    cancel = IKB("Отмена", callback_data="cb_cancel")
+    cancel = IKB("Отмена", callback_data="cb_edit_delete_command")
     input_again = IKB("Ввести заново", callback_data="cb_input_again")
 
     markup.add(name, date, nickname, phone, cancel, input_again)
@@ -53,7 +53,7 @@ def gen_default_actions_markup():
     add_friend = IKB("Добавить друга", callback_data="cb_add_command")
     show = IKB("Посмотреть список", callback_data="cb_show_command")
     # TODO: rename delete callback command
-    edit_delete = IKB("Изменить / Удалить", callback_data="cb_delete_command")
+    edit_delete = IKB("Изменить / Удалить", callback_data="cb_edit_delete_command")
 
     markup.add(add_friend, show, edit_delete)
 
@@ -82,5 +82,17 @@ def gen_example_markup():
     example = IKB("Пример", callback_data="cb_example_command")
 
     markup.add(cancel, example)
+
+    return markup
+
+def gen_cancel_markup():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 1
+
+    IKB = InlineKeyboardButton
+
+    cancel = IKB("Отмена", callback_data="cb_cancel")
+
+    markup.add(cancel)
 
     return markup
