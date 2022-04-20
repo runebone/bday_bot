@@ -20,9 +20,12 @@ class BotText:
     DELETE = "Delete message example."
     EDIT = "Edit message example."
 
+    CHANGED_MIND = "Передумали?"
     CHOOSE_ACTION = "Выберите действие."
     CHOOSE_RECORD = "Выберите запись."
+    CHOOSE_FIELD_TO_EDIT = "Выберите поле, которое хотите изменить."
     YOU_HAVE_CHOSEN_TO_DELETE = "*Вы выбрали:*\n\n{}"
+    YOU_HAVE_CHOSEN_TO_EDIT = "*Вы выбрали:*\n\n{}"
 
     ADD_SUCCESS = "Запись успешно добавлена."
     DELETE_SUCCESS = "Запись успешно удалена."
