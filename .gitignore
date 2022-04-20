@@ -4,3 +4,4 @@ pyTelegramBotAPI/
 **/tmp/**
 *.json
 *test*
+dev_data.py
