@@ -43,17 +43,13 @@ def add(message):
             reply_markup=gen_example_markup())
     bot.register_next_step_handler(message, bc.add.process_add_step, bot, db)
 
-@bot.message_handler(commands=["delete", "cut"])
-def delete(message):
-    bc.delete.process_delete_step(message, bot, db)
+@bot.message_handler(commands=["delete", "cut", "edit", "change"])
+def edit_delete(message):
+    bc.edit_delete.process_edit_delete_step(message, bot, db)
 
 @bot.message_handler(commands=["show", "see"])
 def show(message):
     bc.show.process_show_step(message, bot, db)
-
-@bot.message_handler(commands=["edit", "change"])
-def edit(message):
-    bc.edit.process_edit_step(message, bot, db)
 
 @bot.message_handler(commands=["example"])
 def example(message):
@@ -72,13 +68,13 @@ def callback_query(call):
         elif call.data == "cb_edit_command":
             edit(call.message)
         elif call.data == "cb_delete_command":
-            delete(call.message)
+            edit_delete(call.message)
         elif call.data == "cb_example_command":
             example(call.message)
 
         elif call.data == "cb_delete_record":
             db = get_database()
-            bc.delete.process_confirm_deletion_step(call.message, bot, db)
+            bc.edit_delete.process_confirm_deletion_step(call.message, bot, db)
         elif call.data == "cb_confirm_deletion":
             db = get_database()
 
@@ -109,7 +105,7 @@ def callback_query(call):
     except RecordNotFound:
         bot.send_message(call.message.chat.id, FailText.RecordNotFound)
         bot.register_next_step_handler(call.message, \
-                bc.delete.process_delete_step, bot, db)
+                bc.edit_delete.process_edit_delete_step, bot, db)
     except Exception as e:
         bot.send_message(call.message.chat.id, \
                 FailText.UncaughtError.format(str(e)))
