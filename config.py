@@ -50,6 +50,8 @@ class FailText:
     NoNameInTheBeginning = "Сообщение должно начинаться с имени " \
             "поздравляемого и содержать дату."
     NoDate = "Сообщение должно содержать дату."
+    NoNickname = "Сообщение должно содержать ник."
+    NoPhone = "Сообщение должно содержать номер телефона."
     InvalidNickname = "Ник должен быть не короче 5 и не длиннее 32 символов."
     UserHasNoRecords = "У вас нет записей. " \
     "Чтобы добавить запись, напишите /add, или нажмите на кнопку."
@@ -70,13 +72,74 @@ class Const:
 
 class Error(Exception): pass
 """Base class for custom exceptions."""
-class MessageIsCommand(Error): pass
-class MessageTooLarge(Error): pass
-class NoNameInTheBeginning(Error): pass
-class NoDate(Error): pass
-class InvalidNickname(Error): pass
-class UserHasNoRecords(Error): pass
-class NewUserHasNoRecords(Error): pass
-class RecordIndexOutOfRange(Error): pass
-class RecordAlreadyExists(Error): pass
-class RecordNotFound(Error): pass
+class MessageIsCommand(Error):
+    def add(message, process_function, bot, db):
+        text = "Вы вышли из режима добавления. Введите команду {} повторно, чтобы исполнить её."
+        bot.send_message(message.chat.id, text.format(message.text))
+        process_function(message, bot)
+
+class MessageTooLarge(Error):
+    text = FailText.MessageTooLarge
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, MessageTooLarge.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class NoNameInTheBeginning(Error):
+    text = FailText.NoNameInTheBeginning
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, NoNameInTheBeginning.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class NoDate(Error):
+    text = FailText.NoDate
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, NoDate.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class NoNickname(Error):
+    text = FailText.NoNickname
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, NoNickname.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class NoPhone(Error):
+    text = FailText.NoPhone
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, NoPhone.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class InvalidNickname(Error):
+    text = FailText.InvalidNickname
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, InvalidNickname.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class UserHasNoRecords(Error):
+    text = FailText.UserHasNoRecords
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, UserHasNoRecords.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class NewUserHasNoRecords(Error):
+    text = FailText.NewUserHasNoRecords
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, NewUserHasNoRecords.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class RecordIndexOutOfRange(Error):
+    text = FailText.RecordIndexOutOfRange
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, RecordIndexOutOfRange.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class RecordAlreadyExists(Error):
+    text = FailText.RecordAlreadyExists
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, RecordAlreadyExists.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
+
+class RecordNotFound(Error):
+    text = FailText.RecordNotFound
+    def default(message, process_function, bot, db):
+        bot.send_message(message.chat.id, RecordNotFound.text)
+        bot.register_next_step_handler(message, process_function, bot, db)
