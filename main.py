@@ -100,7 +100,7 @@ def callback_query(call):
         elif call.data == "cb_confirm_deletion":
             db = get_database()
 
-            record = get_record_from_output_message_text(call.message.text, db)
+            record = get_record_from_output_message_text_and_db(call.message.text, db)
 
             db.delete_record_by_record(call.message.chat.id, record)
             bot.send_message(call.message.chat.id, BotText.DELETE_SUCCESS)
@@ -114,11 +114,7 @@ def callback_query(call):
         bot.register_next_step_handler(call.message, \
                 bc.edit_delete.process_edit_delete_step, bot, db)
     except Exception as e:
-        bot.send_message(call.message.chat.id, \
-                FailText.UncaughtError.format(str(e)))
-
-        tb = sys.exc_info()[2]
-        raise e.with_traceback(tb)
+        uncaught_error(call.message, bot, e)
 
 # ===============================================
 
