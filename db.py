@@ -105,11 +105,8 @@ class Database:
         if (user_records == []):
             raise UserHasNoRecords
         else:
-            if (record not in user_records):
-                raise RecordNotFound
-            else:
-                database[self.users][0][chat_id][index] = new_record
-                self.dump(database)
+            database[self.users][0][chat_id][index] = new_record
+            self.dump(database)
 
     def get_record_index_by_record(self, chat_id, record):
         index = None
