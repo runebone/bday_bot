@@ -14,12 +14,9 @@ def process_show_step(message, bot, db):
         bot.send_message(message.chat.id, BotText.CHOOSE_ACTION, \
                 reply_markup=gen_default_actions_markup())
 
-    # FIXME: DRY
     except UserHasNoRecords:
-        bot.send_message(message.chat.id, FailText.UserHasNoRecords, \
-                reply_markup=gen_add_friend_markup())
+        UserHasNoRecords.default(message, bot, db)
     except NewUserHasNoRecords:
-        bot.send_message(message.chat.id, FailText.NewUserHasNoRecords, \
-                reply_markup=gen_add_friend_markup())
+        NewUserHasNoRecords.default(message, bot, db)
     except Exception as e:
         uncaught_error(message, bot, e)
