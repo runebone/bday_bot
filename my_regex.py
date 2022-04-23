@@ -56,10 +56,42 @@ def get_date_from_message(message_string):
     if (date != []):
         # Use first if there are several matches
         date = date[0]
+
+        # FIXME: extra date normalization; ugly code
+        if (not date_is_valid(normalize_date(date))):
+            date = None
     else:
         date = None
 
     return date
+
+def date_is_valid(date_normal):
+    sep = "."
+    day, month, year = map(int, date_normal.split(sep))
+
+    if (month in [1, 3, 5, 7, 8, 10, 12]):
+        if (day <= 31):
+            return True
+    elif (month in [4, 6, 9, 11]):
+        if (day <= 30):
+            return True
+    elif (month == 2):
+        if (is_leap_year(year) and day <= 29):
+            return True
+        elif (day <= 28):
+            return True
+
+    return False
+
+def is_leap_year(year):
+    if (year % 400 == 0):
+        return True
+    elif (year % 100 == 0):
+        return False
+    elif (year % 4 == 0):
+        return True
+    else:
+        return False
 
 def get_nickname_from_message(message_string):
     message_string = remove_comas_from_message(message_string)
