@@ -1,7 +1,9 @@
-# from enum import Enum
 from dev_data import DEVELOPER_CHAT_ID
+from markups import *
 
 class Config:
+    DEFAULT_NOTIFICATION_TIME = "12:00"
+
     class Database:
         file = "database.json"
         sample_record = {
@@ -9,10 +11,17 @@ class Config:
             "date": None,
             "nickname": None,
             "phone": None,
+            "notify_when": [], # Dates to notify at; DD.MM HH:mm
+            # Message sent - pop
+            # TODO: every sunday 00:00 check for empty notify_when and
+            # set it to default / user custom; make sure user custom does not
+            # interfere with "sunday 00:00"
         }
         record_fields = list(sample_record.keys())
         users = "user_data"
 
+# TODO: rename BotText -> Messages
+# TODO: check configs of other programs
 class BotText:
     START = "Вас приветствует *Happy Birthday Bot*!\nДавайте приступим!"
     ADD = "*Введите:*\n1. Имя человека\n2. Дату рождения в формате `DD.MM` или `DD.MM.YYYY`\n3. Ник в телеграме через *@* (по желанию)\n4. Номер телефона (по желанию)\n\n*Пример:*\nИван Иванов 1.1.1991\n\nЧтобы получить другой пример правильного сообщения, напишите /example, или нажмите на кнопку ниже."
@@ -37,6 +46,10 @@ class BotText:
     DELETE_SUCCESS = "Запись успешно удалена."
     EDIT_SUCCESS = "Запись успешно изменена."
 
+    NOTIFICATION_DEFAULT = "Через {days_number} {days_word} день рождения у \"{person}\" {nickname}{sep}{phone}."
+    NOTIFICATION_TOMORROW = "Завтра день рождения у \"{person}\" {nickname}{sep}{phone}."
+    NOTIFICATION_TODAY = "Сегодня день рождения у \"{person}\" {nickname}{sep}{phone}."
+
     output = {
             "index": "№{}",
             "name": "Имя: {}",
@@ -45,6 +58,7 @@ class BotText:
             "phone": "Номер телефона: {}"
     }
 
+# TODO: FailText -> Messages
 class FailText:
     MessageTooLarge = "Сообщение слишком длинное."
     NoNameInTheBeginning = "Сообщение должно начинаться с имени " \
@@ -100,6 +114,7 @@ class MessageIsCommand(Error):
         bot.send_message(message.chat.id, text.format(message.text))
         process_function(message, bot)
 
+# TODO: __class__.__name__ to get class name; create single func
 class MessageTooLarge(Error):
     text = FailText.MessageTooLarge
     def default(message, process_function, bot, db, *args, **kwargs):
