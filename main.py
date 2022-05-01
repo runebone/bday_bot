@@ -4,20 +4,12 @@ import sys
 import telebot
 import bot_commands as bc
 from bot_commands.common import *
-from db import Database
 from config import *
 from my_regex import *
 from example import get_example
-
-# Get API token
-with open(".API_TOKEN") as f:
-    API_TOKEN = f.readline()[:-1]
-
-# Initialize database; global constant
-db = Database(Config.Database.file)
-
-# Initialize bot; global constant
-bot = telebot.TeleBot(API_TOKEN)
+from init import bot, db
+import threading
+from notifications import notifications_job
 
 # For callback functions
 def get_database():
@@ -109,6 +101,13 @@ def callback_query(call):
             bot.send_message(call.message.chat.id, "Edit.")
             index = get_index_from_bot_message(call.message)
 
+        elif call.data == "cb_thanks":
+            bot.edit_message_text(call.message.text,
+                                  call.message.chat.id,
+                                  call.message.message_id,
+                                  reply_markup=None)
+            bot.send_message(call.message.chat.id, "Пожалуйста. 😊")
+
     except RecordNotFound:
         bot.send_message(call.message.chat.id, FailText.RecordNotFound)
         bot.register_next_step_handler(call.message, \
@@ -117,5 +116,9 @@ def callback_query(call):
         uncaught_error(call.message, bot, e)
 
 # ===============================================
+
+notification_thread = threading.Thread(target=notifications_job,
+                                       args=[bot, db])
+notification_thread.start()
 
 bot.infinity_polling()
