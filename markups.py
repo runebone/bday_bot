@@ -108,3 +108,16 @@ def gen_edit_back_markup():
     markup.add(cancel)
 
     return markup
+
+def gen_notification_markup():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 2
+
+    IKB = InlineKeyboardButton
+
+    thanks = IKB("Спасибо", callback_data="cb_thanks")
+    #remind_later = IKB("Напомнить позже", callback_data="cb_remind_later")
+
+    markup.add(thanks)#, remind_later)
+
+    return markup
