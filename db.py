@@ -1,6 +1,14 @@
 from config import *
 import json
 
+# TODO: divide db fields into 2 categories: searchable and unsearchable
+# make func, which will set unsearchable fields to their default values
+# searchable - primary (name, date); unsearchable - secondary (notes, notify)
+#def set_default_secondary_fields(record)
+def set_empty_notify_field(record):
+    record["notify_when"] = []
+    return record
+
 class Database:
     def __init__(self, file):
         self.file = file
@@ -76,10 +84,15 @@ class Database:
             raise NewUserHasNoRecords
         else:
             user_records = self.get_user_records_from_dict(database, chat_id)
+            user_records = list(map(lambda x: set_empty_notify_field(x),
+                                    user_records))
+            record = {i: j for i, j in record.items()}
+            record["notify_when"] = []
 
         if (user_records == []):
             raise UserHasNoRecords
         else:
+
             if (record not in user_records):
                 raise RecordNotFound
             else:
@@ -112,6 +125,10 @@ class Database:
             raise NewUserHasNoRecords
         else:
             user_records = self.get_user_records_from_dict(database, chat_id)
+            user_records = list(map(lambda x: set_empty_notify_field(x),
+                                    user_records))
+            record = {i: j for i, j in record.items()}
+            record["notify_when"] = []
 
         if (user_records == []):
             raise UserHasNoRecords
@@ -124,4 +141,10 @@ class Database:
         return index
 
 if __name__ == "__main__":
-    pass
+    db = Database(Config.Database.file)
+    dbl = db.load()
+    print(dbl)
+    users = list(dbl[db.users][0].keys())
+    for key in users:
+        for user in dbl[db.users][0][key]:
+            print(user["notify_when"])
