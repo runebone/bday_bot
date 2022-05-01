@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-import date
+import date as date_module
 
 # Date regex
 def get_date_regex():
@@ -60,7 +60,7 @@ def get_date_from_message(message_string):
 
         # FIXME: extra date normalization; ugly code
         date_normal = normalize_date(date)
-        if (not date.date_is_valid(normalize_date(date))):
+        if (not date_module.date_is_valid(normalize_date(date))):
             date = None
     else:
         date = None
