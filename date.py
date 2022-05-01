@@ -1,8 +1,27 @@
 from datetime import datetime
 
+#FIXME: rename module
+#FIXME: 1-1-2022 -> 01-01-2022 db fmt
+
 # Considerations:
 # Normal date format (date_normal): DD.MM.YYYY (DD.MM)
 # Database date format (db_date): MM-DD-YYYY (MM-DD)
+
+def get_word_day_in_correct_form(number_of_days):
+    day_word = "дней"
+    n = number_of_days % 100
+
+    if (n < 10 or n > 20):
+        n %= 10
+        if (n == 1):
+            day_word = "день"
+        elif (n in [2, 3, 4]):
+            day_word = "дня"
+
+    return day_word
+
+def get_notification_message(record):
+    pass
 
 month_number_to_ru_name_dict = {
         1: "января",
@@ -93,13 +112,24 @@ def db_date_to_normal_fmt(db_date, sep=".", db_sep="-"):
     return date
 
 def get_date_in_db_fmt(day, month, *year, db_sep="-"):
-    date = db_sep.join(list(map(str, [month, day, *year])))
+    date = db_sep.join(list(map(lambda x: "{:02d}".format(x),
+                                [month, day, *year])))
     return date
 
+# FIXME: remove from_date_in_db_fmt in func names
 def get_dmy_from_date_in_db_fmt(db_date, db_sep="-"):
     date = list(map(int, db_date.split(db_sep)))
     month, day, *year = date
     return (day, month, *year)
+
+def get_date_with_current_year(db_date, db_sep="-"):
+    date = list(map(int, db_date.split(db_sep)))
+    month, day, *year = date
+    year = datetime.now().year
+    month, day, year = list(map(lambda x: "{:02d}".format(x),
+                                [month, day, year]))
+    date = db_sep.join([month, day, year])
+    return date
 
 def get_previous_month(month):
     # Consider month is integer from 1 to 12
@@ -160,3 +190,8 @@ def get_date_x_days_ago(db_date, x):
 if __name__ == "__main__":
     print(get_date_x_days_ago("01-02-2021", 84365))
     print(get_previous_date("03-01-2024"))
+    print(get_previous_date("05-01-2022"))
+    print(get_previous_date("05-01"))
+    #for i in range(100): print(f"{i}", get_word_day_in_correct_form(i))
+    print(get_date_with_current_year("03-01-2020"))
+    print(get_date_with_current_year("03-01"))
