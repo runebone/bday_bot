@@ -18,9 +18,9 @@ def process_edit_delete_step(message, bot, db):
                 reply_markup=gen_cancel_markup())
 
     except UserHasNoRecords:
-        UserHasNoRecords.default(message, bot, db, record, index)
+        UserHasNoRecords.default(message, bot, db)
     except NewUserHasNoRecords:
-        UserHasNoRecords.default(message, bot, db, record, index)
+        UserHasNoRecords.default(message, bot, db)
     except Exception as e:
         uncaught_error(message, bot, e)
 
@@ -73,10 +73,20 @@ def process_input_name_step(message, bot, db, record, index):
         name = message.text
         record["name"] = name
 
-        process_update_name_step(message, bot, db, record, index)
+        user_records = [db.set_empty_notify_field(x) for x in
+                        db.get_user_records(message.chat.id)]
+        record_copy = {i: j for i, j in record.items()}
+        record_copy["notify_when"] = []
 
+        if (record_copy not in user_records):
+            process_update_name_step(message, bot, db, record, index)
+        else:
+            raise RecordAlreadyExists
+
+    except RecordAlreadyExists:
+        RecordAlreadyExists.default(message, process_input_name_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_name(message, default, bot, db)
+        MessageIsCommand.input_name(message, process_input_name_step, bot, db)
     except MessageTooLarge:
         MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
     except Exception as e:
@@ -119,11 +129,23 @@ def process_input_date_step(message, bot, db, record, index):
         date = normalize_date(date)
         date = normal_date_to_usa_format(date)
         record["date"] = date
+        record["notify_when"] = \
+            get_list_of_default_notify_dates(date)
 
-        process_update_date_step(message, bot, db, record, index)
+        user_records = [db.set_empty_notify_field(x) for x in
+                        db.get_user_records(message.chat.id)]
+        record_copy = {i: j for i, j in record.items()}
+        record_copy["notify_when"] = []
 
+        if (record_copy not in user_records):
+            process_update_date_step(message, bot, db, record, index)
+        else:
+            raise RecordAlreadyExists
+
+    except RecordAlreadyExists:
+        RecordAlreadyExists.default(message, process_input_date_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_date(message, default, bot, db)
+        MessageIsCommand.input_date(message, process_input_date_step, bot, db)
     except MessageTooLarge:
         MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
     except NoDate:
@@ -167,12 +189,22 @@ def process_input_nickname_step(message, bot, db, record, index):
         nickname = get_nickname_from_message(message.text)
         record["nickname"] = nickname[1:] # TODO: regex extract without @; fix main logic
 
-        process_update_nickname_step(message, bot, db, record, index)
+        user_records = [db.set_empty_notify_field(x) for x in
+                        db.get_user_records(message.chat.id)]
+        record_copy = {i: j for i, j in record.items()}
+        record_copy["notify_when"] = []
 
+        if (record_copy not in user_records):
+            process_update_nickname_step(message, bot, db, record, index)
+        else:
+            raise RecordAlreadyExists
+
+    except RecordAlreadyExists:
+        RecordAlreadyExists.default(message, process_input_nickname_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_nickname(message, default, bot, db)
+        MessageIsCommand.input_nickname(message, process_input_nickname_step, bot, db)
     except MessageTooLarge:
-        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
+        MessageTooLarge.default(message, process_input_nickname_step, bot, db, record, index)
     except NoNickname:
         NoNickname.default(message, process_input_nickname_step, bot, db, record, index)
     except Exception as e:
@@ -215,12 +247,22 @@ def process_input_phone_step(message, bot, db, record, index):
         phone = normalize_phone(phone)
         record["phone"] = phone
 
-        process_update_phone_step(message, bot, db, record, index)
+        user_records = [db.set_empty_notify_field(x) for x in
+                        db.get_user_records(message.chat.id)]
+        record_copy = {i: j for i, j in record.items()}
+        record_copy["notify_when"] = []
 
+        if (record_copy not in user_records):
+            process_update_phone_step(message, bot, db, record, index)
+        else:
+            raise RecordAlreadyExists
+
+    except RecordAlreadyExists:
+        RecordAlreadyExists.default(message, process_input_phone_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_phone(message, default, bot, db)
+        MessageIsCommand.input_phone(message, process_input_phone_step, bot, db)
     except MessageTooLarge:
-        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
+        MessageTooLarge.default(message, process_input_phone_step, bot, db, record, index)
     except NoPhone:
         NoPhone.default(message, process_input_phone_step, bot, db, record, index)
     except Exception as e:
@@ -262,13 +304,27 @@ def process_input_again_input_step(message, bot, db, record, index):
         assert_message_has_date(message)
 
         record = get_record_from_message_and_db(message, db)
+        record["notify_when"] = \
+            get_list_of_default_notify_dates(record["date"])
 
-        process_update_record_step(message, bot, db, record, index)
+        user_records = [db.set_empty_notify_field(x) for x in
+                        db.get_user_records(message.chat.id)]
+        record_copy = {i: j for i, j in record.items()}
+        record_copy["notify_when"] = []
 
+        if (record_copy not in user_records):
+            process_update_record_step(message, bot, db, record, index)
+        else:
+            raise RecordAlreadyExists
+
+        #process_update_record_step(message, bot, db, record, index)
+
+    except RecordAlreadyExists:
+        RecordAlreadyExists.default(message, process_input_again_input_step, bot, db, record, index)
     except MessageIsCommand:
         pass
     except MessageTooLarge:
-        MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
+        MessageTooLarge.default(message, process_input_again_input_step, bot, db, record, index)
     except NoNameInTheBeginning:
         NoNameInTheBeginning.default(message, process_input_again_input_step, bot, db, record, index)
     except NoDate:
