@@ -1,14 +1,11 @@
 from config import *
+import copy
 import json
 
 # TODO: divide db fields into 2 categories: searchable and unsearchable
 # make func, which will set unsearchable fields to their default values
 # searchable - primary (name, date); unsearchable - secondary (notes, notify)
 #def set_default_secondary_fields(record)
-def set_empty_notify_field(record):
-    record["notify_when"] = []
-    return record
-
 class Database:
     def __init__(self, file):
         self.file = file
@@ -38,7 +35,11 @@ class Database:
         return users_list
 
     def add_user_record_to_dict(self, database_dict, chat_id_str, record_dict):
-        if (record_dict not in database_dict[self.users][0][chat_id_str]):
+        database_records = [self.set_empty_notify_field(x) for x in
+                    copy.deepcopy(database_dict[self.users][0][chat_id_str])]
+        record = {i: j for i, j in record_dict.items()}
+        record["notify_when"] = []
+        if (record not in database_records):
             database_dict[self.users][0][chat_id_str].append(record_dict)
         else:
             raise RecordAlreadyExists
@@ -84,7 +85,7 @@ class Database:
             raise NewUserHasNoRecords
         else:
             user_records = self.get_user_records_from_dict(database, chat_id)
-            user_records = list(map(lambda x: set_empty_notify_field(x),
+            user_records = list(map(lambda x: self.set_empty_notify_field(x),
                                     user_records))
             record = {i: j for i, j in record.items()}
             record["notify_when"] = []
@@ -125,7 +126,7 @@ class Database:
             raise NewUserHasNoRecords
         else:
             user_records = self.get_user_records_from_dict(database, chat_id)
-            user_records = list(map(lambda x: set_empty_notify_field(x),
+            user_records = list(map(lambda x: self.set_empty_notify_field(x),
                                     user_records))
             record = {i: j for i, j in record.items()}
             record["notify_when"] = []
@@ -133,12 +134,18 @@ class Database:
         if (user_records == []):
             raise UserHasNoRecords
         else:
-            if (record not in database[self.users][0][chat_id]):
+            #if (record not in database[self.users][0][chat_id]):
+            if (record not in user_records):
                 raise RecordNotFound
             else:
-                index = database[self.users][0][chat_id].index(record)
+                #index = database[self.users][0][chat_id].index(record)
+                index = user_records.index(record)
 
         return index
+
+    def set_empty_notify_field(self, record):
+        record["notify_when"] = []
+        return record
 
 if __name__ == "__main__":
     db = Database(Config.Database.file)
