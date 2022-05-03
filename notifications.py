@@ -100,9 +100,10 @@ def send_notification_default(bot, chat_id, record, n_days):
 def get_hmdmy_from_notify_date(db_notify_date, db_sep="-"):
     date = " ".join(db_notify_date.split(db_sep))
     date = " ".join(date.split(":"))
-    month, day, *year, hour, minute = list(map(int, date.split()))
+    month, day, *year, hour, minute = map(int, date.split())
     return (hour, minute, day, month, *year)
 
+# FIXME: db_notify_date always contains year
 def time_to_send(db_notify_date):
     now = datetime.datetime.now()
     date_tuple = get_hmdmy_from_notify_date(db_notify_date)
@@ -122,6 +123,32 @@ def time_to_send(db_notify_date):
 
     return False
 
+def out_of_date(db_notify_date):
+    now = datetime.datetime.now()
+    date_tuple = get_hmdmy_from_notify_date(db_notify_date)
+    hour, minute, day, month, year = date_tuple
+
+    if (year < now.year):
+        return True
+    elif (year == now.year):
+        if (month < now.month):
+            return True
+        elif (month == now.month):
+            if (day < now.day):
+                return True
+
+    return False
+
+def get_next_year_notify_date(db_notify_date, sep="-"):
+    date_tuple = get_hmdmy_from_notify_date(db_notify_date)
+    hour, minute, day, month, year = date_tuple
+    year += 1
+    hour, minute, day, month, year = map(lambda x: "{:02d}".format(x),
+                                         [hour, minute, day, month, year])
+    date = " ".join([sep.join([month, day, year]),
+                     ":".join([hour, minute])])
+    return date
+
 def check_database_and_send_notifications(bot, db):
     db_dict = db.load()
     users = db.get_users_list_from_dict(db_dict)
@@ -133,34 +160,40 @@ def check_database_and_send_notifications(bot, db):
             for notify_date in record["notify_when"]:
 
                 if (time_to_send(notify_date)):
-                    # XXX: notify date does not contain year !!!
                     notify_date_without_time = notify_date.split()[0]
                     bday_date = record["date"]
                     prev_to_bday_date = my_date.get_previous_date(bday_date)
 
                     # FIXME: ugly remove-year-from-date
-                    bday_is_today = (bday_date
+                    bday_is_today = (bday_date[:5]
                                      == notify_date_without_time[:5])
 
-                    print(bday_date, notify_date)
-
-                    bday_is_tomorrow = (prev_to_bday_date
+                    bday_is_tomorrow = (prev_to_bday_date[:5]
                                         == notify_date_without_time[:5])
+
                     if (bday_is_today):
                         send_notification_today(bot, chat_id, record)
                     elif (bday_is_tomorrow):
                         send_notification_tomorrow(bot, chat_id, record)
                     else:
-                        # FIXME: x = get_diff_between_dates; 7 -> x
-                        send_notification_default(bot, chat_id, record, 7)
+                        x = my_date.get_days_until_bday(
+                                notify_date_without_time,
+                                bday_date)
+                        send_notification_default(bot, chat_id, record, x)
 
                     notify_dates_to_remove.append(notify_date)
 
+                elif (out_of_date(notify_date)):
+                    notify_dates_to_remove.append(notify_date)
+
+            # XXX: infinity loop when there are same records
             record_index = db.get_record_index_by_record(chat_id, record)
             new_record = record
 
             for nd in notify_dates_to_remove:
                 new_record["notify_when"].remove(nd)
+                new_date = get_next_year_notify_date(nd)
+                new_record["notify_when"].append(new_date)
 
             db.update_record_by_index(chat_id, new_record, record_index)
 
