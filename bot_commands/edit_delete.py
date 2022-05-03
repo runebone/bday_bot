@@ -28,8 +28,7 @@ def process_confirm_deletion_step(message, bot, db):
     try:
         bot.send_message(message.chat.id, \
                 BotText.YOU_HAVE_CHOSEN_TO_DELETE.format(message.text), \
-                reply_markup=gen_confirm_deletion_markup(),
-                parse_mode="Markdown")
+                reply_markup=gen_confirm_deletion_markup())
     except Exception as e:
         uncaught_error(message, bot, e)
 
@@ -40,8 +39,7 @@ def process_edit_record_step(message, bot, db):
         text += "\n\n"
         text += BotText.CHOOSE_FIELD_TO_EDIT
         bot.send_message(message.chat.id, text, \
-                reply_markup=gen_edit_record_markup(),
-                parse_mode="Markdown")
+                reply_markup=gen_edit_record_markup())
 
     except Exception as e:
         uncaught_error(message, bot, e)
