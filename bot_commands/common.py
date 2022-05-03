@@ -1,6 +1,7 @@
 from my_regex import *
 from config import *
 from markups import *
+from date import *
 import sys
 import traceback
 
@@ -145,6 +146,17 @@ def get_record_from_message_and_db(message, db):
         record["phone"] = phone
 
     return record
+
+def get_list_of_default_notify_dates(db_date):
+    time = Config.DEFAULT_NOTIFICATION_TIME
+
+    bday = get_date_with_current_year(db_date)
+    day_before_bday = get_previous_date(bday)
+    week_before_bday = get_date_x_days_ago(bday, 7)
+
+    notify_dates = list(map(lambda x: " ".join([x, time]),
+                            [bday, week_before_bday, day_before_bday]))
+    return notify_dates
 
 def assert_message_is_not_command(message):
     if (message_is_command(message)):
