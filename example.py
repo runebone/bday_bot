@@ -4,42 +4,85 @@ from datetime import datetime
 # TODO: add more funny names and definitions
 
 names = \
-"""Миша
+"""
+Иван
+Серёга
+Макс
 Паша
+Никита
+Миша
+Георгий
 Семён
 Игорь
 Дима
-Егор
-Лера
-Соня
+Саша
+Степан
+Витя
+Маша
+Настя
 Катя
 Аня
-Макс
-Степан
-Серёга
-Джамбулат""".split("\n")
+Соня
+Лиза
+Полина
+""".strip("\n").split("\n")
+
+other_names = \
+"""
+Торин
+Бильбо
+Гэндальф
+Голлум
+Смауг
+Фродо
+Саурон
+Леголас
+Арагорн
+
+Дамблдор
+Гарри
+Рон
+Гермиона
+Драко
+
+Том
+Джерри
+"""
 
 definitions = \
-"""школа
-работа
-сборы
+"""
+школа
 универ
+работа
 коллега
-папа
-мама
-сестра
-брат
 математика
 физика
 программирование
-литература
 английский
 китайский
 японский
-шахта
-дача
-пиломатериалы
-еда""".split("\n")
+секта
+спам
+доставка
+машина
+курсы
+ветеринар
+дровосек
+ментор
+мастер
+сантехник
+пицца
+заказ
+юрист
+адвокат
+риелтор
+квартира
+клиент
+нотариус
+страхование
+коп
+работник
+""".strip("\n").split("\n")
 
 date_formats = \
 """{:d} {:d} {:02d}
@@ -47,28 +90,62 @@ date_formats = \
 
 # Generate nicknames
 nick_adjectives = \
-"""street
-mountain
+"""
+street
+natural
+ocean
+forest
+siberian
+good
+bad
+ugly
 cool
 great
 awesome
 handsome
-perfect
-ideal
-i_love
-i_hate
-amazing""".split("\n")
+incredible
+amazing
+big_brain
+soul
+crazy
+workout
+brave
+powerful
+fearless
+glorious
+beatbox
+skateboard
+snowboard
+marshall_arts
+kung_fu
+fluffy
+hip_hop
+""".strip("\n").split("\n")
 
 nick_nouns = \
-"""man
+"""
+man
+mate
 dude
-sister
-father
-racer
-king
 king_kong
-elon_musk
-jeff_bezos""".split("\n")
+humanoid
+batman
+harry_potter
+hermione
+dumpledore
+voldemort
+gandalf
+gollum
+sauron
+viking
+firebender
+panda
+tiger
+monkey
+snake
+turtle
+kitten
+""".strip("\n").split("\n")
 
 phone_formats = \
 """{:03d}{:03d}{:02d}{:02d}
@@ -86,7 +163,7 @@ def get_example():
 
     example.append(get_random_date())
 
-    if (chance(70)):
+    if (chance(80)):
         example.append(get_random_nickname())
 
     if (chance(50)):
