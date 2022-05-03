@@ -25,16 +25,13 @@ class Config:
 class BotText:
     START = "Вас приветствует *Happy Birthday Bot*!\nДавайте приступим!"
     ADD = "*Введите:*\n1. Имя человека\n2. Дату рождения в формате `DD.MM` или `DD.MM.YYYY`\n3. Ник в телеграме через *@* (по желанию)\n4. Номер телефона (по желанию)\n\n*Пример:*\nИван Иванов 1.1.1991\n\nЧтобы получить другой пример правильного сообщения, напишите /example, или нажмите на кнопку ниже."
-    SHOW = "Show message example."
-    DELETE = "Delete message example."
-    EDIT = "Edit message example."
 
     CHANGED_MIND = "Передумали?"
     CHOOSE_ACTION = "Выберите действие."
     CHOOSE_RECORD = "Выберите запись."
     CHOOSE_FIELD_TO_EDIT = "Выберите поле, которое хотите изменить."
-    YOU_HAVE_CHOSEN_TO_DELETE = "*Вы выбрали:*\n\n{}"
-    YOU_HAVE_CHOSEN_TO_EDIT = "*Вы выбрали:*\n\n{}"
+    YOU_HAVE_CHOSEN_TO_DELETE = "Вы выбрали:\n\n{}" # XXX: rm **
+    YOU_HAVE_CHOSEN_TO_EDIT = "Вы выбрали:\n\n{}" # XXX: rm **
 
     NAME_INPUT_OFFER = "Введите новое имя:"
     DATE_INPUT_OFFER = "Введите новую дату:"
