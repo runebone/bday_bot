@@ -12,18 +12,8 @@ def process_add_step(message, bot, db):
 
         record = get_record_from_message_and_db(message, db)
 
-        time = Config.DEFAULT_NOTIFICATION_TIME
-
         # FIXME: get field name from config
-        bday = get_date_with_current_year(record["date"])
-
-        day_before_bday = get_previous_date(bday)
-        week_before_bday = get_date_x_days_ago(bday, 7)
-
-        notify_dates = list(map(lambda x: " ".join([x, time]),
-                                [bday, week_before_bday, day_before_bday]))
-
-        # FIXME: get field name from config
+        notify_dates = get_list_of_default_notify_dates(record["date"])
         record["notify_when"] = notify_dates
 
         db.add_new_record(message.chat.id, record)
