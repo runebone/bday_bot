@@ -187,11 +187,67 @@ def get_date_x_days_ago(db_date, x):
 
     return date_x_days_ago
 
+# FIXME: list(map(... -> map(... everywhere in project
+def get_days_until_bday(notify_date, bday_date, sep="-"):
+    notify_month, notify_day, notify_year = map(int, notify_date.split(sep))
+    bday_month, bday_day, *bday_year = map(int, bday_date.split(sep))
+
+    bday_year = notify_year
+    cond1 = (bday_month < notify_month)
+    cond2 = (bday_month == notify_month)
+    cond3 = (bday_day < notify_day)
+    if (cond1 or (cond2 and cond3)):
+        bday_year += 1
+
+    days = 0
+    for month in range(notify_month - 1,
+                       bday_month + 12 * (bday_year - notify_year) - 1):
+        # Adds days from all in-between months including
+        # notify_month and excluding bday_month
+        days += days_in_months_dict[1 + month % 12]
+
+    # days -= (notify_day - 1) # v1
+    days -= notify_day # Equivalent to v1
+    days += bday_day
+
+    # Account 29th February
+    cond1 = is_leap_year(notify_year)
+    cond2 = (notify_month <= 2)
+    cond3 = (bday_month > 2)
+    if (cond1 and cond2 and cond3):
+        days += 1
+
+    cond1 = (notify_year < bday_year)
+    cond2 = (is_leap_year(bday_year))
+    cond3 = (bday_month > 2)
+    if (cond1 and cond2 and cond3):
+        days += 1
+
+    # days -= 1 # v1
+
+    return days
+
 if __name__ == "__main__":
     print(get_date_x_days_ago("01-02-2021", 84365))
     print(get_previous_date("03-01-2024"))
     print(get_previous_date("05-01-2022"))
     print(get_previous_date("05-01"))
+    print(is_leap_year(2020))
     #for i in range(100): print(f"{i}", get_word_day_in_correct_form(i))
     print(get_date_with_current_year("03-01-2020"))
     print(get_date_with_current_year("03-01"))
+
+    print(get_days_until_bday("01-01-2020", "03-01-2020")) # 60
+    print(get_days_until_bday("02-27-2020", "03-01-2020")) # 3
+    print(get_days_until_bday("02-29-2020", "03-01-2020")) # 1
+    print(get_days_until_bday("02-27-2020", "02-29-2020")) # 2
+    print(get_days_until_bday("02-27-2020", "02-27-2020")) # 0
+    print(get_days_until_bday("02-27-2020", "02-28-2020")) # 1
+    print()
+    print(get_days_until_bday("04-27-2020", "03-27")) # 334 (365 - 31)
+    print(get_days_until_bday("04-01-2020", "03-01")) # 334 (365 - 31)
+    print(get_days_until_bday("04-01-2019", "03-01")) # 335 (366 - 31)
+    print(get_days_until_bday("04-01-2020", "04-01")) # 0
+    print(get_days_until_bday("06-01-2020", "12-01")) # 183
+    print(get_days_until_bday("12-01-2020", "12-31")) # 30
+    print(get_days_until_bday("12-01-2020", "01-01")) # 31
