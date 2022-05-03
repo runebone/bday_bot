@@ -20,7 +20,7 @@ def get_bot():
 
 # ===============================================
 
-@bot.message_handler(commands=["default", "help"])
+@bot.message_handler(commands=["default", "help", "menu"])
 @bot.message_handler(func=lambda message: not message_is_command(message))
 def default(message):
     bot.send_message(message.chat.id, BotText.CHOOSE_ACTION,\
@@ -76,18 +76,48 @@ def callback_query(call):
         elif call.data == "cb_edit_name":
             db = get_database()
             bc.edit_delete.process_edit_name_step(call.message, bot, db)
+            edited_message = re.sub(BotText.CHOOSE_FIELD_TO_EDIT, "",
+                                    call.message.text)
+            bot.edit_message_text(edited_message,
+                    call.message.chat.id,
+                    call.message.message_id,
+                    reply_markup=None)
         elif call.data == "cb_edit_date":
             db = get_database()
             bc.edit_delete.process_edit_date_step(call.message, bot, db)
+            edited_message = re.sub(BotText.CHOOSE_FIELD_TO_EDIT, "",
+                                    call.message.text)
+            bot.edit_message_text(edited_message,
+                    call.message.chat.id,
+                    call.message.message_id,
+                    reply_markup=None)
         elif call.data == "cb_edit_nickname":
             db = get_database()
             bc.edit_delete.process_edit_nickname_step(call.message, bot, db)
+            edited_message = re.sub(BotText.CHOOSE_FIELD_TO_EDIT, "",
+                                    call.message.text)
+            bot.edit_message_text(edited_message,
+                    call.message.chat.id,
+                    call.message.message_id,
+                    reply_markup=None)
         elif call.data == "cb_edit_phone":
             db = get_database()
             bc.edit_delete.process_edit_phone_step(call.message, bot, db)
+            edited_message = re.sub(BotText.CHOOSE_FIELD_TO_EDIT, "",
+                                    call.message.text)
+            bot.edit_message_text(edited_message,
+                    call.message.chat.id,
+                    call.message.message_id,
+                    reply_markup=None)
         elif call.data == "cb_input_again":
             db = get_database()
             bc.edit_delete.process_input_again_step(call.message, bot, db)
+            edited_message = re.sub(BotText.CHOOSE_FIELD_TO_EDIT, "",
+                                    call.message.text)
+            bot.edit_message_text(edited_message,
+                    call.message.chat.id,
+                    call.message.message_id,
+                    reply_markup=None)
 
         elif call.data == "cb_confirm_deletion":
             db = get_database()
@@ -116,6 +146,17 @@ def callback_query(call):
         uncaught_error(call.message, bot, e)
 
 # ===============================================
+
+bot.set_my_commands(
+    commands=[
+        telebot.types.BotCommand("menu", "вызвать интерактивное меню"),
+        telebot.types.BotCommand("add", "добавить новую запись"),
+        telebot.types.BotCommand("show", "показать текущие записи"),
+        telebot.types.BotCommand("edit", "вызвать меню изменения/удаления записей"),
+        telebot.types.BotCommand("example", "получить пример правильной записи")
+    ],
+    scope=telebot.types.BotCommandScopeAllPrivateChats()
+)
 
 notification_thread = threading.Thread(target=notifications_job,
                                        args=[bot, db])
