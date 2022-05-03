@@ -153,13 +153,13 @@ class InvalidNickname(Error):
 
 class UserHasNoRecords(Error):
     text = FailText.UserHasNoRecords
-    def default(message, bot, db):
+    def default(message, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, UserHasNoRecords.text, reply_markup=gen_add_friend_markup())
         #bot.register_next_step_handler(message, process_function, bot, db)
 
 class NewUserHasNoRecords(Error):
     text = FailText.NewUserHasNoRecords
-    def default(message, bot, db):
+    def default(message, bot, db, *args, **kwargs):
         bot.send_message(message.chat.id, NewUserHasNoRecords.text, reply_markup=gen_add_friend_markup())
         #bot.register_next_step_handler(message, process_function, bot, db)
 
