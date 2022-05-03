@@ -69,10 +69,18 @@ def callback_query(call):
         elif call.data == "cb_delete_record":
             db = get_database()
             bc.edit_delete.process_confirm_deletion_step(call.message, bot, db)
+            bot.edit_message_text(call.message.text,
+                    call.message.chat.id,
+                    call.message.message_id,
+                    reply_markup=None)
 
         elif call.data == "cb_edit_record":
             db = get_database()
             bc.edit_delete.process_edit_record_step(call.message, bot, db)
+            bot.edit_message_text(call.message.text,
+                    call.message.chat.id,
+                    call.message.message_id,
+                    reply_markup=None)
         elif call.data == "cb_edit_name":
             db = get_database()
             bc.edit_delete.process_edit_name_step(call.message, bot, db)
