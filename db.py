@@ -60,8 +60,9 @@ class Database:
 
         self.dump(database)
 
+    # NOTE: always return deep copies of structure.
     def get_user_records_from_dict(self, database_dict, chat_id_str):
-        return database_dict[self.users][0][chat_id_str]
+        return copy.deepcopy(database_dict[self.users][0][chat_id_str])
 
     def get_user_records(self, chat_id):
         chat_id = str(chat_id)
@@ -76,6 +77,7 @@ class Database:
 
         return user_records
 
+    # NOTE: always edit/delete records by index inside; safer.
     def delete_record_by_record(self, chat_id, record):
         chat_id = str(chat_id)
         database = self.load()
@@ -92,13 +94,12 @@ class Database:
 
         if (user_records == []):
             raise UserHasNoRecords
+        elif (record not in user_records):
+            raise RecordNotFound
         else:
-
-            if (record not in user_records):
-                raise RecordNotFound
-            else:
-                database[self.users][0][chat_id].remove(record)
-                self.dump(database)
+            index = self.get_record_index_by_record(chat_id, record)
+            database[self.users][0][chat_id].pop(index)
+            self.dump(database)
 
     def update_record_by_index(self, chat_id, new_record, index):
         chat_id = str(chat_id)
@@ -142,6 +143,24 @@ class Database:
                 index = user_records.index(record)
 
         return index
+
+    def get_record_by_index(self, chat_id, index):
+        chat_id = str(chat_id)
+        database = self.load()
+        users = self.get_users_list_from_dict(database)
+
+        if (chat_id not in users):
+            raise NewUserHasNoRecords
+        else:
+            user_records = self.get_user_records_from_dict(database, chat_id)
+
+        if (len(user_records) <= index):
+            # raise Error
+            pass
+        else:
+            record = user_records[index]
+
+        return record
 
     def set_empty_notify_field(self, record):
         record["notify_when"] = []
