@@ -132,7 +132,7 @@ humanoid
 batman
 harry_potter
 hermione
-dumpledore
+dumbledore
 voldemort
 gandalf
 gollum
