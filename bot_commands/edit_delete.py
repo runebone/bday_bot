@@ -55,8 +55,10 @@ def process_edit_name_step(message, bot, db):
                 reply_markup=gen_cancel_markup(),
                 parse_mode="Markdown")
 
+        # XXX: record contains only fields contained in message and default secondary fields
         record = get_record_from_output_message_text_and_db(message.text, db)
         index = db.get_record_index_by_record(message.chat.id, record)
+        record = db.get_record_by_index(message.chat.id, index)
 
         bot.register_next_step_handler(message, process_input_name_step, bot, db, record, index)
 
@@ -111,6 +113,7 @@ def process_edit_date_step(message, bot, db):
 
         record = get_record_from_output_message_text_and_db(message.text, db)
         index = db.get_record_index_by_record(message.chat.id, record)
+        record = db.get_record_by_index(message.chat.id, index)
 
         bot.register_next_step_handler(message, process_input_date_step, bot, db, record, index)
 
@@ -172,6 +175,7 @@ def process_edit_nickname_step(message, bot, db):
 
         record = get_record_from_output_message_text_and_db(message.text, db)
         index = db.get_record_index_by_record(message.chat.id, record)
+        record = db.get_record_by_index(message.chat.id, index)
 
         bot.register_next_step_handler(message, process_input_nickname_step, bot, db, record, index)
 
@@ -229,6 +233,7 @@ def process_edit_phone_step(message, bot, db):
 
         record = get_record_from_output_message_text_and_db(message.text, db)
         index = db.get_record_index_by_record(message.chat.id, record)
+        record = db.get_record_by_index(message.chat.id, index)
 
         bot.register_next_step_handler(message, process_input_phone_step, bot, db, record, index)
 
@@ -287,6 +292,7 @@ def process_input_again_step(message, bot, db):
 
         record = get_record_from_output_message_text_and_db(message.text, db)
         index = db.get_record_index_by_record(message.chat.id, record)
+        record = db.get_record_by_index(message.chat.id, index)
 
         bot.register_next_step_handler(message, process_input_again_input_step, bot, db, record, index)
 
