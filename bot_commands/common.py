@@ -32,7 +32,8 @@ def message_is_command(message):
             "show", "see",
             "edit", "change",
             "cancel",
-            "example"
+            "example",
+            "default", "menu"
             ]
     commands = list(map(lambda word: "/" + word, commands))
 
