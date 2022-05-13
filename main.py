@@ -20,7 +20,7 @@ def get_bot():
 
 # ===============================================
 
-@bot.message_handler(commands=["default", "help", "menu"])
+@bot.message_handler(commands=["default", "help", "menu", "reset"])
 @bot.message_handler(func=lambda message: not message_is_command(message))
 def default(message):
     bot.send_message(message.chat.id, BotText.CHOOSE_ACTION,\
