@@ -52,7 +52,7 @@ def process_edit_name_step(message, bot, db):
     try:
         text = BotText.NAME_INPUT_OFFER
         bot.send_message(message.chat.id, text, \
-                reply_markup=gen_cancel_markup(),
+                # reply_markup=gen_edit_back_markup(),
                 parse_mode="Markdown")
 
         # XXX: record contains only fields contained in message and default secondary fields
@@ -86,7 +86,13 @@ def process_input_name_step(message, bot, db, record, index):
     except RecordAlreadyExists:
         RecordAlreadyExists.default(message, process_input_name_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_name(message, process_input_name_step, bot, db)
+        if (message.text == "/cancel"):
+            MessageIsCommand.cancel_input_name(message, process_edit_delete_step, bot, db)
+        elif (message.text == "/example"):
+            bot.send_message(message.chat.id, "Пример:\n" + get_example_name())
+            bot.register_next_step_handler(message, process_input_name_step, bot, db, record, index)
+        else:
+            MessageIsCommand.input_name(message, process_edit_delete_step, bot, db)
     except MessageTooLarge:
         MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
     except Exception as e:
@@ -108,7 +114,7 @@ def process_edit_date_step(message, bot, db):
     try:
         text = BotText.DATE_INPUT_OFFER
         bot.send_message(message.chat.id, text, \
-                reply_markup=gen_cancel_markup(),
+                # reply_markup=gen_edit_back_markup(),
                 parse_mode="Markdown")
 
         record = get_record_from_output_message_text_and_db(message.text, db)
@@ -146,7 +152,13 @@ def process_input_date_step(message, bot, db, record, index):
     except RecordAlreadyExists:
         RecordAlreadyExists.default(message, process_input_date_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_date(message, process_input_date_step, bot, db)
+        if (message.text == "/cancel"):
+            MessageIsCommand.cancel_input_date(message, process_edit_delete_step, bot, db)
+        elif (message.text == "/example"):
+            bot.send_message(message.chat.id, "Пример:\n" + get_example_date())
+            bot.register_next_step_handler(message, process_input_date_step, bot, db, record, index)
+        else:
+            MessageIsCommand.input_date(message, process_edit_delete_step, bot, db)
     except MessageTooLarge:
         MessageTooLarge.default(message, process_input_name_step, bot, db, record, index)
     except NoDate:
@@ -170,7 +182,7 @@ def process_edit_nickname_step(message, bot, db):
     try:
         text = BotText.NICKNAME_INPUT_OFFER
         bot.send_message(message.chat.id, text, \
-                reply_markup=gen_cancel_markup(),
+                # reply_markup=gen_edit_back_markup(),
                 parse_mode="Markdown")
 
         record = get_record_from_output_message_text_and_db(message.text, db)
@@ -204,7 +216,16 @@ def process_input_nickname_step(message, bot, db, record, index):
     except RecordAlreadyExists:
         RecordAlreadyExists.default(message, process_input_nickname_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_nickname(message, process_input_nickname_step, bot, db)
+        if (message.text == "/cancel"):
+            MessageIsCommand.cancel_input_nickname(message, process_edit_delete_step, bot, db)
+        elif (message.text == "/example"):
+            bot.send_message(message.chat.id, "Пример:\n" + get_example_nickname())
+            bot.register_next_step_handler(message, process_input_nickname_step, bot, db, record, index)
+        elif (message.text == "/reset"):
+            record["nickname"] = None
+            process_update_nickname_step(message, bot, db, record, index)
+        else:
+            MessageIsCommand.input_nickname(message, process_edit_delete_step, bot, db)
     except MessageTooLarge:
         MessageTooLarge.default(message, process_input_nickname_step, bot, db, record, index)
     except NoNickname:
@@ -228,7 +249,7 @@ def process_edit_phone_step(message, bot, db):
     try:
         text = BotText.PHONE_INPUT_OFFER
         bot.send_message(message.chat.id, text, \
-                reply_markup=gen_cancel_markup(),
+                # reply_markup=gen_edit_back_markup(),
                 parse_mode="Markdown")
 
         record = get_record_from_output_message_text_and_db(message.text, db)
@@ -263,7 +284,16 @@ def process_input_phone_step(message, bot, db, record, index):
     except RecordAlreadyExists:
         RecordAlreadyExists.default(message, process_input_phone_step, bot, db, record, index)
     except MessageIsCommand:
-        MessageIsCommand.input_phone(message, process_input_phone_step, bot, db)
+        if (message.text == "/cancel"):
+            MessageIsCommand.cancel_input_phone(message, process_edit_delete_step, bot, db)
+        elif (message.text == "/example"):
+            bot.send_message(message.chat.id, "Пример:\n" + get_example_phone())
+            bot.register_next_step_handler(message, process_input_phone_step, bot, db, record, index)
+        elif (message.text == "/reset"):
+            record["phone"] = None
+            process_update_phone_step(message, bot, db, record, index)
+        else:
+            MessageIsCommand.input_phone(message, process_edit_delete_step, bot, db)
     except MessageTooLarge:
         MessageTooLarge.default(message, process_input_phone_step, bot, db, record, index)
     except NoPhone:
@@ -287,7 +317,7 @@ def process_input_again_step(message, bot, db):
     try:
         text = BotText.INPUT_AGAIN_OFFER
         bot.send_message(message.chat.id, text, \
-                reply_markup=gen_cancel_markup(),
+                # reply_markup=gen_edit_back_markup(),
                 parse_mode="Markdown")
 
         record = get_record_from_output_message_text_and_db(message.text, db)
@@ -326,7 +356,13 @@ def process_input_again_input_step(message, bot, db, record, index):
     except RecordAlreadyExists:
         RecordAlreadyExists.default(message, process_input_again_input_step, bot, db, record, index)
     except MessageIsCommand:
-        pass
+        if (message.text == "/cancel"):
+            MessageIsCommand.cancel_input_again(message, process_edit_delete_step, bot, db)
+        elif (message.text == "/example"):
+            bot.send_message(message.chat.id, "Пример:\n" + get_example())
+            bot.register_next_step_handler(message, process_input_again_input_step, bot, db, record, index)
+        else:
+            MessageIsCommand.input_again(message, process_edit_delete_step, bot, db)
     except MessageTooLarge:
         MessageTooLarge.default(message, process_input_again_input_step, bot, db, record, index)
     except NoNameInTheBeginning:
