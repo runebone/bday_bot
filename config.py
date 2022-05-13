@@ -24,7 +24,9 @@ class Config:
 # TODO: check configs of other programs
 class BotText:
     START = "Вас приветствует *Happy Birthday Bot*!\nДавайте приступим!"
-    ADD = "*Введите:*\n1. Имя человека\n2. Дату рождения в формате `DD.MM` или `DD.MM.YYYY`\n3. Ник в телеграме через *@* (по желанию)\n4. Номер телефона (по желанию)\n\n*Пример:*\nИван Иванов 1.1.1991\n\nЧтобы получить другой пример правильного сообщения, напишите /example.\n\nЧтобы выйти из режима добавления записи, напишите /cancel."
+    RECORD_EXAMPLE = "*Введите:*\n1. Имя человека\n2. Дату рождения в формате `DD.MM` или `DD.MM.YYYY`\n3. Ник в телеграме через *@* (по желанию)\n4. Номер телефона (по желанию)\n\n*Пример:*\nИван Иванов 1.1.1991\n\nЧтобы получить другой пример правильного сообщения, напишите /example."
+    EXIT_ADD = "Чтобы выйти из режима добавления записи, напишите /cancel."
+    ADD = "\n\n".join([RECORD_EXAMPLE, EXIT_ADD])
 
     CHANGED_MIND = "Передумали?"
     CHOOSE_ACTION = "Выберите действие."
@@ -33,11 +35,12 @@ class BotText:
     YOU_HAVE_CHOSEN_TO_DELETE = "Вы выбрали:\n\n{}" # XXX: rm **
     YOU_HAVE_CHOSEN_TO_EDIT = "Вы выбрали:\n\n{}" # XXX: rm **
 
-    NAME_INPUT_OFFER = "Введите новое имя; напишите /example для получения примера, или /cancel - для отмены."
-    DATE_INPUT_OFFER = "Введите новую дату; напишите /example для получения примера, или /cancel - для отмены."
-    NICKNAME_INPUT_OFFER = "Введите новый ник через *@*; напишите /example для получения примера, /cancel - для отмены, или /reset - для удаления."
-    PHONE_INPUT_OFFER = "Введите новый номер телефона; напишите /example для получения примера, /cancel - для отмены, или /reset - для удаления."
-    INPUT_AGAIN_OFFER = ADD
+    NAME_INPUT_OFFER = "Введите новое имя, или напишите:\n/example - для получения примера,\n/cancel - для отмены."
+    DATE_INPUT_OFFER = "Введите новую дату, или напишите:\n/example - для получения примера,\n/cancel - для отмены."
+    NICKNAME_INPUT_OFFER = "Введите новый ник через *@*, или напишите:\n/example - для получения примера,\n/cancel - для отмены,\n/reset - для сброса ника."
+    PHONE_INPUT_OFFER = "Введите новый номер телефона, или напишите:\n/example - для получения примера,\n/cancel - для отмены,\n/reset - для сброса номера телефона."
+    EXIT_INPUT_AGAIN = "Чтобы выйти из режима повторного ввода записи, напишите /cancel."
+    INPUT_AGAIN_OFFER = "\n\n".join([RECORD_EXAMPLE, EXIT_INPUT_AGAIN])
 
     ADD_SUCCESS = "Запись успешно добавлена."
     DELETE_SUCCESS = "Запись успешно удалена."
