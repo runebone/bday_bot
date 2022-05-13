@@ -36,7 +36,8 @@ def start(message):
 def add(message):
     bot.send_message(message.chat.id, BotText.ADD, \
             parse_mode="Markdown", \
-            reply_markup=gen_example_markup())
+            #reply_markup=gen_example_markup()
+            )
     bot.register_next_step_handler(message, bc.add.process_add_step, bot, db)
 
 @bot.message_handler(commands=["delete", "cut", "edit", "change"])
