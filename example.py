@@ -173,6 +173,25 @@ def get_example():
 
     return example
 
+def get_example_name():
+    example = [get_random_name()]
+
+    if (chance(90)):
+        example.append(get_random_definition())
+
+    example = " ".join(example)
+
+    return example
+
+def get_example_date():
+    return get_random_date()
+
+def get_example_nickname():
+    return get_random_nickname()
+
+def get_example_phone():
+    return get_random_phone()
+
 def get_random_name():
     name = np.random.choice(names)
     return name
