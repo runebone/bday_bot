@@ -103,7 +103,7 @@ def gen_edit_back_markup():
 
     IKB = InlineKeyboardButton
 
-    cancel = IKB("Назад", callback_data="cb_edit_back")
+    cancel = IKB("Назад", callback_data="cb_edit_delete_command")
 
     markup.add(cancel)
 
