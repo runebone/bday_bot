@@ -24,7 +24,7 @@ class Config:
 # TODO: check configs of other programs
 class BotText:
     START = "Вас приветствует *Happy Birthday Bot*!\nДавайте приступим!"
-    ADD = "*Введите:*\n1. Имя человека\n2. Дату рождения в формате `DD.MM` или `DD.MM.YYYY`\n3. Ник в телеграме через *@* (по желанию)\n4. Номер телефона (по желанию)\n\n*Пример:*\nИван Иванов 1.1.1991\n\nЧтобы получить другой пример правильного сообщения, напишите /example, или нажмите на кнопку ниже."
+    ADD = "*Введите:*\n1. Имя человека\n2. Дату рождения в формате `DD.MM` или `DD.MM.YYYY`\n3. Ник в телеграме через *@* (по желанию)\n4. Номер телефона (по желанию)\n\n*Пример:*\nИван Иванов 1.1.1991\n\nЧтобы получить другой пример правильного сообщения, напишите /example.\n\nЧтобы выйти из режима добавления записи, напишите /cancel."
 
     CHANGED_MIND = "Передумали?"
     CHOOSE_ACTION = "Выберите действие."
@@ -33,10 +33,10 @@ class BotText:
     YOU_HAVE_CHOSEN_TO_DELETE = "Вы выбрали:\n\n{}" # XXX: rm **
     YOU_HAVE_CHOSEN_TO_EDIT = "Вы выбрали:\n\n{}" # XXX: rm **
 
-    NAME_INPUT_OFFER = "Введите новое имя:"
-    DATE_INPUT_OFFER = "Введите новую дату:"
-    NICKNAME_INPUT_OFFER = "Введите новый ник через *@*:"
-    PHONE_INPUT_OFFER = "Введите новый номер телефона:"
+    NAME_INPUT_OFFER = "Введите новое имя; напишите /example для получения примера, или /cancel - для отмены."
+    DATE_INPUT_OFFER = "Введите новую дату; напишите /example для получения примера, или /cancel - для отмены."
+    NICKNAME_INPUT_OFFER = "Введите новый ник через *@*; напишите /example для получения примера, /cancel - для отмены, или /reset - для удаления."
+    PHONE_INPUT_OFFER = "Введите новый номер телефона; напишите /example для получения примера, /cancel - для отмены, или /reset - для удаления."
     INPUT_AGAIN_OFFER = ADD
 
     ADD_SUCCESS = "Запись успешно добавлена."
@@ -86,30 +86,65 @@ class Const:
 class Error(Exception): pass
 """Base class for custom exceptions."""
 class MessageIsCommand(Error):
-    def add(message, process_function, bot, db):
+    def add(message, process_function, bot, db, *args, **kwargs):
         text = "Вы вышли из режима добавления. Введите команду {} повторно, чтобы исполнить её."
         bot.send_message(message.chat.id, text.format(message.text))
-        process_function(message, bot)
+        process_function(message, bot, db, *args, **kwargs)
 
-    def input_name(message, process_function, bot, db):
+    def input_name(message, process_function, bot, db, *args, **kwargs):
         text = "Вы вышли из режима изменения имени. Введите команду {} повторно, чтобы исполнить её."
         bot.send_message(message.chat.id, text.format(message.text))
-        process_function(message, bot)
+        process_function(message, bot, db, *args, **kwargs)
 
-    def input_date(message, process_function, bot, db):
+    def input_date(message, process_function, bot, db, *args, **kwargs):
         text = "Вы вышли из режима изменения даты. Введите команду {} повторно, чтобы исполнить её."
         bot.send_message(message.chat.id, text.format(message.text))
-        process_function(message, bot)
+        process_function(message, bot, db, *args, **kwargs)
 
-    def input_nickname(message, process_function, bot, db):
+    def input_nickname(message, process_function, bot, db, *args, **kwargs):
         text = "Вы вышли из режима изменения ника. Введите команду {} повторно, чтобы исполнить её."
         bot.send_message(message.chat.id, text.format(message.text))
-        process_function(message, bot)
+        process_function(message, bot, db, *args, **kwargs)
 
-    def input_phone(message, process_function, bot, db):
+    def input_phone(message, process_function, bot, db, *args, **kwargs):
         text = "Вы вышли из режима изменения номера телефона. Введите команду {} повторно, чтобы исполнить её."
         bot.send_message(message.chat.id, text.format(message.text))
-        process_function(message, bot)
+        process_function(message, bot, db, *args, **kwargs)
+
+    def input_again(message, process_function, bot, db, *args, **kwargs):
+        text = "Вы вышли из режима повторного введения записи. Введите команду {} заново, чтобы исполнить её."
+        bot.send_message(message.chat.id, text.format(message.text))
+        process_function(message, bot, db, *args, **kwargs)
+
+    def cancel_add(message, process_function, bot, db, *args, **kwargs):
+        text = "Вы вышли из режима добавления."
+        bot.send_message(message.chat.id, text)
+        process_function(message, bot, db, *args, **kwargs)
+
+    def cancel_input_name(message, process_function, bot, db, *args, **kwargs):
+        text = "Вы вышли из режима изменения имени."
+        bot.send_message(message.chat.id, text)
+        process_function(message, bot, db, *args, **kwargs)
+
+    def cancel_input_date(message, process_function, bot, db, *args, **kwargs):
+        text = "Вы вышли из режима изменения даты."
+        bot.send_message(message.chat.id, text)
+        process_function(message, bot, db, *args, **kwargs)
+
+    def cancel_input_nickname(message, process_function, bot, db, *args, **kwargs):
+        text = "Вы вышли из режима изменения ника."
+        bot.send_message(message.chat.id, text)
+        process_function(message, bot, db, *args, **kwargs)
+
+    def cancel_input_phone(message, process_function, bot, db, *args, **kwargs):
+        text = "Вы вышли из режима изменения номера телефона."
+        bot.send_message(message.chat.id, text)
+        process_function(message, bot, db, *args, **kwargs)
+
+    def cancel_input_again(message, process_function, bot, db, *args, **kwargs):
+        text = "Вы вышли из режима повторного введения записи."
+        bot.send_message(message.chat.id, text)
+        process_function(message, bot, db, *args, **kwargs)
 
 # TODO: __class__.__name__ to get class name; create single func
 class MessageTooLarge(Error):
