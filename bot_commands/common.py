@@ -2,11 +2,12 @@ from my_regex import *
 from config import *
 from markups import *
 from date import *
+from example import *
 import sys
 import traceback
 
 # FIXME: copied from main.py to use in add; idk yet how to fix it
-def default(message, bot):
+def default(message, bot, *args, **kwargs):
     bot.send_message(message.chat.id, BotText.CHOOSE_ACTION,\
             reply_markup=gen_default_actions_markup())
 
@@ -31,7 +32,7 @@ def message_is_command(message):
             "delete", "cut",
             "show", "see",
             "edit", "change",
-            "cancel",
+            "cancel", "reset", # XXX
             "example",
             "default", "menu"
             ]
