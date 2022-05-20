@@ -317,6 +317,7 @@ def get_current_date_in_x_hours(x):
 
 if __name__ == "__main__":
     if (True):
+        pass
         #print(get_current_date_in_x_hours(300))
         #print(get_date_x_days_after("01-01-2021", 59))
         #print(get_date_x_days_after("01-01-2020", 59))
