@@ -115,9 +115,9 @@ def gen_notification_markup():
 
     IKB = InlineKeyboardButton
 
-    thanks = IKB("Спасибо", callback_data="cb_thanks")
-    #remind_later = IKB("Напомнить позже", callback_data="cb_remind_later")
+    thanks = IKB("Готово, спасибо! 👍", callback_data="cb_thanks")
+    remind_later = IKB("Напомни через 3 часа. 🙏", callback_data="cb_remind_later")
 
-    markup.add(thanks)#, remind_later)
+    markup.add(remind_later, thanks)
 
     return markup
