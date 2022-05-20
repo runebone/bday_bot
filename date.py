@@ -297,13 +297,29 @@ def get_days_until_bday(notify_date, bday_date, sep="-"):
 
     return days
 
-def get_current_date_in_n_hours(n):
+def get_current_date_in_x_hours(x):
+    year = datetime.today().year
+    month = datetime.today().month
+    day = datetime.today().day
     hour = datetime.today().hour
     minute = datetime.today().minute
-    print(hour, minute)
+
+    date = get_date_in_db_fmt(day, month, year)
+    hour += x
+
+    if (hour > 24):
+        date = get_date_x_days_after(date, (hour // 24))
+        hour %= 24
+
+    date = " ".join([date, "{:02d}:{:02d}".format(hour, minute)])
+
+    return date
 
 if __name__ == "__main__":
     if (True):
+        #print(get_current_date_in_x_hours(300))
+        #print(get_date_x_days_after("01-01-2021", 59))
+        #print(get_date_x_days_after("01-01-2020", 59))
         #print(get_next_date("06-29-2001"))
         #print(get_date_x_days_ago("01-02-2021", 1461))
         #print(get_date_x_days_after("01-02-2021", 81461))
