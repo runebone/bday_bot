@@ -12,7 +12,8 @@ class Database:
         self.sample_record = Config.Database.sample_record
         self.record_fields = Config.Database.record_fields
         self.users = Config.Database.users
-        self.empty = {self.users: [{}]}
+        self.sn = Config.Database.sn
+        self.empty = {self.users: [{}], self.sn: []}
 
     def load(self):
         try:
@@ -165,6 +166,24 @@ class Database:
     def set_empty_notify_field(self, record):
         record["notify_when"] = []
         return record
+
+    def create_new_single_notification(self, chat_id, date, text):
+        database = self.load()
+
+        # FIXME: field names -> config
+        record = {
+            "chat_id": chat_id,
+            "date": date,
+            "text": text
+        }
+
+        # field_name = "single_notificatoins"
+        # if (field_name not in list(database.keys())):
+            # database[field_name] = []
+
+        database[self.sn].append(record)
+
+        self.dump(database)
 
 if __name__ == "__main__":
     db = Database(Config.Database.file)
