@@ -160,6 +160,8 @@ def callback_query(call):
 
             date = get_current_date_in_x_hours(x_hours)
 
+            # FIXME: what if bday is on 21.12 and it will be 22.12 in 3 hours
+            # so edit message; mb mention the bday date in the message
             db.create_new_single_notification(call.message.chat.id,
                                               date, call.message.text)
 
