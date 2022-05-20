@@ -19,6 +19,7 @@ class Config:
         }
         record_fields = list(sample_record.keys())
         users = "user_data"
+        sn = "single_notifications"
 
 # TODO: rename BotText -> Messages
 # TODO: check configs of other programs
