@@ -103,7 +103,6 @@ def get_hmdmy_from_notify_date(db_notify_date, db_sep="-"):
     month, day, *year, hour, minute = map(int, date.split())
     return (hour, minute, day, month, *year)
 
-# FIXME: db_notify_date always contains year
 def time_to_send(db_notify_date):
     now = datetime.datetime.now()
     date_tuple = get_hmdmy_from_notify_date(db_notify_date)
@@ -198,9 +197,26 @@ def check_database_and_send_notifications(bot, db):
 
             db.update_record_by_index(chat_id, new_record, record_index)
 
+def check_and_send_single_notifications(bot, db):
+    db_dict = db.load()
+
+    records_to_remove = []
+
+    for record in db_dict[db.sn]:
+        if (time_to_send(record["date"])):
+            bot.send_message(record["chat_id"], record["text"],
+                             reply_markup=gen_notification_markup())
+            records_to_remove.append(record)
+
+    for record in records_to_remove:
+        db_dict[db.sn].remove(record)
+
+    db.dump(db_dict)
+
 def notifications_job(bot, db):
     while True:
         check_database_and_send_notifications(bot, db)
+        check_and_send_single_notifications(bot, db)
         time.sleep(1)
 
 if __name__ == "__main__":
