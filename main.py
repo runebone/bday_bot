@@ -147,6 +147,24 @@ def callback_query(call):
                                   reply_markup=None)
             bot.send_message(call.message.chat.id, "Пожалуйста. 😊")
 
+        # XXX
+        elif call.data == "cb_remind_later":
+            bot.edit_message_text(call.message.text,
+                                  call.message.chat.id,
+                                  call.message.message_id,
+                                  reply_markup=None)
+
+            x_hours = 3
+
+            db = get_database()
+
+            date = get_current_date_in_x_hours(x_hours)
+
+            db.create_new_single_notification(call.message.chat.id,
+                                              date, call.message.text)
+
+            bot.send_message(call.message.chat.id, "Напомню через 3 часа. 👌")
+
     except RecordNotFound:
         bot.send_message(call.message.chat.id, FailText.RecordNotFound)
         bot.register_next_step_handler(call.message, \
