@@ -149,6 +149,7 @@ def get_next_year_notify_date(db_notify_date, sep="-"):
                      ":".join([hour, minute])])
     return date
 
+# FIXME: single responsibility of function
 def check_database_and_send_notifications(bot, db):
     db_dict = db.load()
     users = db.get_users_list_from_dict(db_dict)
