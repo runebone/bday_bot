@@ -65,10 +65,10 @@ def gen_confirm_deletion_markup():
 
     IKB = InlineKeyboardButton
 
-    cancel = IKB("Отмена", callback_data="cb_cancel")
+    back = IKB("Назад", callback_data="cb_edit_delete_command")
     c_del = IKB("Подтвердить удаление", callback_data="cb_confirm_deletion")
 
-    markup.add(cancel, c_del)
+    markup.add(back, c_del)
 
     return markup
 
