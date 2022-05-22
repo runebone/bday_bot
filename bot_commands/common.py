@@ -61,6 +61,26 @@ def get_output_string(record, index):
 
     return format_string
 
+def get_record_string(record, index):
+    date = us_date_to_ru_format(record["date"])
+
+    fmt_string = []
+    fmt_string.append(f"{index + 1}.")
+    fmt_string.append(record["name"])
+    fmt_string.append("--")
+    fmt_string.append(date)
+
+    if (record["nickname"] != None and record["phone"] != None):
+        fmt_string.append(f"(@{record['nickname']}, {record['phone']})")
+    elif (record["nickname"] != None):
+        fmt_string.append(f"(@{record['nickname']})")
+    elif (record["phone"] != None):
+        fmt_string.append(f"({record['phone']})")
+
+    fmt_string = " ".join(fmt_string)
+
+    return fmt_string
+
 def assert_user_has_records(message, db):
     records = db.get_user_records(message.chat.id)
     if (len(records) == 0):
