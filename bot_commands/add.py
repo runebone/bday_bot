@@ -18,8 +18,13 @@ def process_add_step(message, bot, db):
 
         db.add_new_record(message.chat.id, record)
 
-        bot.send_message(message.chat.id, BotText.ADD_SUCCESS, \
-                reply_markup=gen_default_actions_markup())
+        bot.send_message(message.chat.id, BotText.ADD_SUCCESS)#, \
+                #reply_markup=gen_default_actions_markup())
+
+        bot.send_message(message.chat.id, BotText.ADD_MORE)#, \
+                #reply_markup=gen_default_actions_markup())
+
+        bot.register_next_step_handler(message, process_add_step, bot, db)
 
     except MessageIsCommand:
         if (message.text == "/example"):
@@ -28,6 +33,9 @@ def process_add_step(message, bot, db):
             bot.register_next_step_handler(message, process_add_step, bot, db)
         elif (message.text == "/cancel"):
             MessageIsCommand.cancel_add(message, default, bot, db)
+        elif (message.text == "/show" or message.text == "/see"): # FIXME
+            show(message, bot, db)
+            bot.register_next_step_handler(message, process_add_step, bot, db)
         else:
             MessageIsCommand.add(message, default, bot, db)
     except MessageTooLarge:
@@ -40,5 +48,29 @@ def process_add_step(message, bot, db):
         InvalidNickname.default(message, process_add_step, bot, db)
     except RecordAlreadyExists:
         RecordAlreadyExists.default(message, process_add_step, bot, db)
+    except Exception as e:
+        uncaught_error(message, bot, e)
+
+def show(message, bot, db):
+    try:
+        assert_user_has_records(message, db)
+
+        records = db.get_user_records(message.chat.id)
+
+        msg = []
+
+        for i in range(len(records)):
+            string = get_record_string(records[i], i)
+
+            msg.append(string)
+
+            if ((i + 1) > 0 and (i + 1) % 10 == 0 or i == (len(records) - 1)):
+                bot.send_message(message.chat.id, "\n".join(msg))
+                msg = []
+
+    except UserHasNoRecords:
+        UserHasNoRecords.default(message, bot, db)
+    except NewUserHasNoRecords:
+        NewUserHasNoRecords.default(message, bot, db)
     except Exception as e:
         uncaught_error(message, bot, e)
