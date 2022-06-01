@@ -3,7 +3,8 @@ from config import BotText
 import date as my_date
 import time
 import datetime
-from markups import gen_notification_markup
+from markups import gen_notification_today_markup, \
+                    gen_notification_default_markup
 
 # Function which opens db file every time; checks for coming up bdays
 # And sends notificatons
@@ -36,7 +37,7 @@ def send_notification_today(bot, chat_id, record):
                                                sep=sep,
                                                phone=phone)
 
-    bot.send_message(chat_id, msg, reply_markup=gen_notification_markup())
+    bot.send_message(chat_id, msg, reply_markup=gen_notification_today_markup())
 
 def send_notification_tomorrow(bot, chat_id, record):
     person = record["name"]
@@ -63,7 +64,7 @@ def send_notification_tomorrow(bot, chat_id, record):
                                                sep=sep,
                                                phone=phone)
 
-    bot.send_message(chat_id, msg, reply_markup=gen_notification_markup())
+    bot.send_message(chat_id, msg, reply_markup=gen_notification_default_markup())
 
 def send_notification_default(bot, chat_id, record, n_days):
     msg = BotText.NOTIFICATION_DEFAULT
@@ -95,7 +96,7 @@ def send_notification_default(bot, chat_id, record, n_days):
                                               sep=sep,
                                               phone=phone)
 
-    bot.send_message(chat_id, msg, reply_markup=gen_notification_markup())
+    bot.send_message(chat_id, msg, reply_markup=gen_notification_default_markup())
 
 def get_hmdmy_from_notify_date(db_notify_date, db_sep="-"):
     date = " ".join(db_notify_date.split(db_sep))
@@ -205,7 +206,7 @@ def check_and_send_single_notifications(bot, db):
     for record in db_dict[db.sn]:
         if (time_to_send(record["date"])):
             bot.send_message(record["chat_id"], record["text"],
-                             reply_markup=gen_notification_markup())
+                             reply_markup=gen_notification_today_markup())
             records_to_remove.append(record)
 
     for record in records_to_remove:
