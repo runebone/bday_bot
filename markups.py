@@ -109,7 +109,19 @@ def gen_edit_back_markup():
 
     return markup
 
-def gen_notification_markup():
+def gen_notification_default_markup():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 1
+
+    IKB = InlineKeyboardButton
+
+    thanks = IKB("Спасибо! 😇", callback_data="cb_thanks")
+
+    markup.add(thanks)
+
+    return markup
+
+def gen_notification_today_markup():
     markup = InlineKeyboardMarkup()
     markup.row_width = 2
 
