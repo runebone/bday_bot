@@ -17,9 +17,9 @@ def send_debug_info_to_dev(message, bot):
 
 def uncaught_error(message, bot, exception):
     send_debug_info_to_dev(message, bot)
-    bot.send_message(message.chat.id, \
-            FailText.UncaughtError.format(str(exception)))
-    raise_traceback(exception)
+    # bot.send_message(message.chat.id, \
+            # FailText.UncaughtError.format(str(exception)))
+    # raise_traceback(exception)
 
 def raise_traceback(exception):
     tb = sys.exc_info()[2]
