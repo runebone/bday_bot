@@ -17,6 +17,7 @@ def send_notification_today(bot, chat_id, record):
     nickname = ""
     phone = ""
     sep = ""
+    space = ""
 
     if (record["nickname"]):
         nickname = "@" + record["nickname"]
@@ -27,15 +28,19 @@ def send_notification_today(bot, chat_id, record):
         nickname = "".join(["(", nickname])
         phone = "".join([phone, ")"])
         sep = ", "
+        space = " "
     elif (nickname):
         nickname = bracketize(nickname)
+        space = " "
     elif (phone):
         phone = bracketize(phone)
+        space = " "
 
     msg = BotText.NOTIFICATION_TODAY.format(person=person,
                                                nickname=nickname,
                                                sep=sep,
-                                               phone=phone)
+                                               phone=phone,
+                                               space=space)
 
     bot.send_message(chat_id, msg, reply_markup=gen_notification_today_markup())
 
@@ -44,6 +49,7 @@ def send_notification_tomorrow(bot, chat_id, record):
     nickname = ""
     phone = ""
     sep = ""
+    space = ""
 
     if (record["nickname"]):
         nickname = "@" + record["nickname"]
@@ -54,15 +60,19 @@ def send_notification_tomorrow(bot, chat_id, record):
         nickname = "".join(["(", nickname])
         phone = "".join([phone, ")"])
         sep = ", "
+        space = " "
     elif (nickname):
         nickname = bracketize(nickname)
+        space = " "
     elif (phone):
         phone = bracketize(phone)
+        space = " "
 
     msg = BotText.NOTIFICATION_TOMORROW.format(person=person,
                                                nickname=nickname,
                                                sep=sep,
-                                               phone=phone)
+                                               phone=phone,
+                                               space=space)
 
     bot.send_message(chat_id, msg, reply_markup=gen_notification_default_markup())
 
@@ -72,6 +82,7 @@ def send_notification_default(bot, chat_id, record, n_days):
     nickname = ""
     phone = ""
     sep = ""
+    space = ""
 
     if (record["nickname"]):
         nickname = "@" + record["nickname"]
@@ -82,10 +93,13 @@ def send_notification_default(bot, chat_id, record, n_days):
         nickname = "".join(["(", nickname])
         phone = "".join([phone, ")"])
         sep = ", "
+        space = " "
     elif (nickname):
         nickname = bracketize(nickname)
+        space = " "
     elif (phone):
         phone = bracketize(phone)
+        space = " "
 
     word = my_date.get_word_day_in_correct_form(n_days)
 
@@ -94,7 +108,8 @@ def send_notification_default(bot, chat_id, record, n_days):
                                               person=person,
                                               nickname=nickname,
                                               sep=sep,
-                                              phone=phone)
+                                              phone=phone,
+                                              space=space)
 
     bot.send_message(chat_id, msg, reply_markup=gen_notification_default_markup())
 

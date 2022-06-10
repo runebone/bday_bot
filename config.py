@@ -49,9 +49,9 @@ class BotText:
     DELETE_SUCCESS = "Запись успешно удалена."
     EDIT_SUCCESS = "Запись успешно изменена."
 
-    NOTIFICATION_DEFAULT = "Через {days_number} {days_word} день рождения у {person} {nickname}{sep}{phone}."
-    NOTIFICATION_TOMORROW = "Завтра день рождения у {person} {nickname}{sep}{phone}."
-    NOTIFICATION_TODAY = "Сегодня день рождения у {person} {nickname}{sep}{phone}."
+    NOTIFICATION_DEFAULT = "Через {days_number} {days_word} день рождения у {person}{space}{nickname}{sep}{phone}."
+    NOTIFICATION_TOMORROW = "Завтра день рождения у {person}{space}{nickname}{sep}{phone}."
+    NOTIFICATION_TODAY = "Сегодня день рождения у {person}{space}{nickname}{sep}{phone}."
 
     output = {
             "index": "№{}",
