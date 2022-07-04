@@ -13,7 +13,7 @@ def process_show_step(message, bot, db):
 
             msg.append(string)
 
-            if ((i + 1) > 0 and (i + 1) % 10 == 0 or i == (len(records) - 1)):
+            if ((i + 1) > 0 and (i + 1) % 100 == 0 or i == (len(records) - 1)):
                 bot.send_message(message.chat.id, "\n".join(msg))
                 msg = []
 
