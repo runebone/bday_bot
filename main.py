@@ -10,6 +10,7 @@ from example import get_example
 from init import bot, db
 import threading
 from notifications import notifications_job
+from auto_backup import auto_backup_job
 
 # For callback functions
 def get_database():
@@ -190,5 +191,8 @@ bot.set_my_commands(
 notification_thread = threading.Thread(target=notifications_job,
                                        args=[bot, db])
 notification_thread.start()
+
+autobackup_thread = threading.Thread(target=auto_backup_job)
+autobackup_thread.start()
 
 bot.infinity_polling()

@@ -55,33 +55,32 @@ HOUR = 60 * 60
 
 DB_CURRENT = f"{BOT_DIR}/{BOT_DB_FILE}"
 
-print("Auto-backup job has started.")
+def auto_backup_job():
+    while True:
+        DB_LATEST_BACKUP = BACKUP_DIR + "/" + get_latest_backup_filename()
 
-while True:
-    DB_LATEST_BACKUP = BACKUP_DIR + "/" + get_latest_backup_filename()
+        with open(DB_CURRENT) as current, open(DB_LATEST_BACKUP) as latest_backup:
+            db_current_dict = json.load(current)
+            db_latest_backup_dict = json.load(latest_backup)
 
-    with open(DB_CURRENT) as current, open(DB_LATEST_BACKUP) as latest_backup:
-        db_current_dict = json.load(current)
-        db_latest_backup_dict = json.load(latest_backup)
+        db_current = BdayBotDB(db_current_dict)
+        db_latest_backup = BdayBotDB(db_latest_backup_dict)
 
-    db_current = BdayBotDB(db_current_dict)
-    db_latest_backup = BdayBotDB(db_latest_backup_dict)
+        DATABASE_ERASED_ITSELF = not all(user in db_current.users for user in db_latest_backup.users)
+        DATABASES_ARE_DIFFERENT = (db_current.db != db_latest_backup.db)
 
-    DATABASE_ERASED_ITSELF = not all(user in db_current.users for user in db_latest_backup.users)
-    DATABASES_ARE_DIFFERENT = (db_current.db != db_latest_backup.db)
+        if (DATABASES_ARE_DIFFERENT):
+            if (DATABASE_ERASED_ITSELF):
+                # print("Database erased itself!")
+                db_merged = merge(db_latest_backup, db_current)
+                with open(DB_CURRENT, "w") as file:
+                    json.dump(db_merged.init_db, file, indent=4)
+                db_current = db_merged
+                # print("Databases have been merged together.")
 
-    if (DATABASES_ARE_DIFFERENT):
-        if (DATABASE_ERASED_ITSELF):
-            # print("Database erased itself!")
-            db_merged = merge(db_latest_backup, db_current)
-            with open(DB_CURRENT, "w") as file:
-                json.dump(db_merged.init_db, file, indent=4)
-            db_current = db_merged
-            # print("Databases have been merged together.")
+            backup_file = BACKUP_DIR + "/" + gen_backup_filename()
+            with open(backup_file, "w") as file:
+                json.dump(db_current.init_db, file, indent=4)
+            # print("Backup file has been created.")
 
-        backup_file = BACKUP_DIR + "/" + gen_backup_filename()
-        with open(backup_file, "w") as file:
-            json.dump(db_current.init_db, file, indent=4)
-        # print("Backup file has been created.")
-
-    sleep(1 * MINUTE)
+        sleep(1 * HOUR)
