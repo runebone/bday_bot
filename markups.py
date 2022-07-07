@@ -50,10 +50,10 @@ def gen_default_actions_markup():
 
     IKB = InlineKeyboardButton
 
-    add_friend = IKB("Добавить друга", callback_data="cb_add_command")
-    show = IKB("Посмотреть список", callback_data="cb_show_command")
+    add_friend = IKB("Добавить дату 🎉🎂🎈", callback_data="cb_add_command")
+    show = IKB("Посмотреть список 👀", callback_data="cb_show_command")
     # TODO: rename delete callback command
-    edit_delete = IKB("Изменить / Удалить", callback_data="cb_edit_delete_command")
+    edit_delete = IKB("Изменить / Удалить запись ⚙️", callback_data="cb_edit_delete_command")
 
     markup.add(add_friend, show, edit_delete)
 
