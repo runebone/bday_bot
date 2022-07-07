@@ -1,6 +1,14 @@
 from dev_data import DEVELOPER_CHAT_ID
 from markups import *
 
+BOT_DIR = "."
+BACKUP_DIR = "backup"
+
+BOT_DB_FILE = "database.json"
+
+DATE_FMT = "%y%m%d-%H%M%S"
+BACKUP_FILE = f"db_{DATE_FMT}.json"
+
 class Config:
     DEFAULT_NOTIFICATION_TIME = "12:00"
 

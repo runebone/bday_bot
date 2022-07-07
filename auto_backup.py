@@ -3,13 +3,9 @@ from copy import deepcopy
 import os
 import json
 import datetime
+from config import BOT_DIR, BACKUP_DIR
+from config import BOT_DB_FILE, BACKUP_FILE
 
-BOT_DIR = "bot_dir"
-BOT_DB_FILE = "database.json"
-
-DATE_FMT = "%y%m%d-%H%M%S"
-BACKUP_DIR = "backup_dir"
-BACKUP_FILE = f"db_{DATE_FMT}.json"
 
 def gen_backup_filename():
     return datetime.datetime.now().strftime(BACKUP_FILE)
@@ -55,7 +51,7 @@ HOUR = 60 * 60
 
 DB_CURRENT = f"{BOT_DIR}/{BOT_DB_FILE}"
 
-def auto_backup_job():
+def auto_backup_job(db_erase_handle_func):
     while True:
         DB_LATEST_BACKUP = BACKUP_DIR + "/" + get_latest_backup_filename()
 
@@ -76,6 +72,7 @@ def auto_backup_job():
                 with open(DB_CURRENT, "w") as file:
                     json.dump(db_merged.init_db, file, indent=4)
                 db_current = db_merged
+                db_erase_handle_func()
                 # print("Databases have been merged together.")
 
             backup_file = BACKUP_DIR + "/" + gen_backup_filename()
@@ -83,4 +80,4 @@ def auto_backup_job():
                 json.dump(db_current.init_db, file, indent=4)
             # print("Backup file has been created.")
 
-        sleep(1 * HOUR)
+        sleep(10 * MINUTE)
